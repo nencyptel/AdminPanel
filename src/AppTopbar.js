@@ -1,6 +1,7 @@
 import React ,{useRef} from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+<<<<<<< HEAD
 import { Dropdown } from 'primereact/dropdown';
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
@@ -17,6 +18,20 @@ let items = [
 ];
 const menu = useRef(null);
 
+=======
+// import 'react-dropdown/style.css';
+import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
+import './components/top.css'
+
+export const AppTopbar = (props) => {
+
+    let items = [{label: 'New', icon: 'pi pi-fw pi-plus'},
+                 {label: 'Delete', icon: 'pi pi-fw pi-trash'}];
+
+    const menu = useRef(null);
+    
+>>>>>>> 4b197349c26642a1673a365bfcbefab0da6089c9
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
@@ -42,10 +57,11 @@ const menu = useRef(null);
                     <li>
                         <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
                             <i className="pi pi-cog"/>
-                            <span>Settings</span>
+                            <span >Settings</span>
                         </button>
                     </li>
                     <li>
+<<<<<<< HEAD
 
                     {/* <Dropdown className="pi pi-fw pi-user" options={citySelectItems}></Dropdown> */}
         
@@ -54,6 +70,13 @@ const menu = useRef(null);
                         <Button label="" icon="pi pi-user" onClick={(event) => menu.current.toggle(event)}/>
                         <span>Profile</span>                                           
                         </button>
+=======
+                    <button className="p-link topbar-button " style={{display:"flex",marginLeft:"6px"}}  onClick={props.onMobileSubTopbarMenuClick}>
+                        <Menu model={items} popup ref={menu} />
+                        <Button label="" icon="pi pi-user" style={{color:"grey",border:"none",background:"transparent",display:"flex"}} onClick={(event) => menu.current.toggle(event)}/>   
+                        <span className="span1">Profile</span>                                                                      
+                    </button>   
+>>>>>>> 4b197349c26642a1673a365bfcbefab0da6089c9
                     </li>
                 </ul>
         </div>

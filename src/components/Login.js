@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../components/style/login.css";
-import { useDispatch, useSelector } from "react-redux";
-import { LoginData } from "./Redux/Reducer/LoginSlice";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Toast } from "primereact/toast";
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const toast = useRef(null);
 
-    const [tokenid, setTokenid] = useState(" ");
+    const toast = useRef(null);
 
     const [user, setUser] = useState({
         Email: "",
@@ -19,6 +14,7 @@ const Login = () => {
     });
 
     const handleChange = (e) => {
+        console.log("hjhk"+e.target.value);
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
@@ -30,7 +26,7 @@ const Login = () => {
             Password: user.Password,
         };
 
-        const response = await axios.post("http://localhost:4000/get/user/login", data);
+        const response = await axios.post("http://192.168.250.1/get/user/login", data);
         console.log(response.data);
         if (response) {
             setUser({
@@ -96,7 +92,7 @@ const Login = () => {
                                     Have'nt an account ? <a href="#/register">Sign up</a>
                                 </p>
                                 <p className="forgot-password ">
-                                    Forgot <a href="#">password?</a>
+                                    Forgot <a href="/">password?</a>
                                 </p>
                             </div>
                         </div>
