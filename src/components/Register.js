@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import "../components/style/login.css";
 import { Toast } from "primereact/toast";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from 'axios';
 
 const Register = () => {
@@ -104,7 +104,7 @@ const Register = () => {
                                     Already have an account? <a href="#/login">Login</a>
                                 </p>
                                 <p className="forgot-password ">
-                                    Forgot <a href="#">password?</a>
+                                    Forgot <a href="#/forgetpassword">password?</a>
                                 </p>
                             </div>
                         </div>

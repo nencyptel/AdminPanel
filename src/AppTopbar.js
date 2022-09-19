@@ -1,9 +1,17 @@
-import React  from 'react';
+import React ,{useRef} from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
+// import 'react-dropdown/style.css';
+import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
+import './components/top.css'
 export const AppTopbar = (props) => {
 
+    let items = [{label: 'New', icon: 'pi pi-fw pi-plus'},
+                 {label: 'Delete', icon: 'pi pi-fw pi-trash'}];
+
+    const menu = useRef(null);
+    
     return (
         <div className="layout-topbar">
             <Link to="/" className="layout-topbar-logo">
@@ -29,14 +37,15 @@ export const AppTopbar = (props) => {
                     <li>
                         <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
                             <i className="pi pi-cog"/>
-                            <span>Settings</span>
+                            <span >Settings</span>
                         </button>
                     </li>
                     <li>
-                        <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
-                            <i className="pi pi-user"/>
-                            <span>Profile</span>c                                               
-                        </button>
+                    <button className="p-link topbar-button " style={{display:"flex",marginLeft:"6px"}}  onClick={props.onMobileSubTopbarMenuClick}>
+                        <Menu model={items} popup ref={menu} />
+                        <Button label="" icon="pi pi-user" style={{color:"grey",border:"none",background:"transparent",display:"flex"}} onClick={(event) => menu.current.toggle(event)}/>   
+                        <span className="span1">Profile</span>                                                                      
+                    </button>   
                     </li>
                 </ul>
         </div>

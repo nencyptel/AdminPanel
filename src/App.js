@@ -30,14 +30,11 @@ import BlocksDemo from "./components/BlocksDemo";
 import IconsDemo from "./components/IconsDemo";
 import PrivateRoute from "./components/Routes/ProtectedRoutes";
 import Login from "./components/Login";
-import Menubar from "./components/Common/menubar";
 import Crud from "./pages/Crud";
 import EmptyPage from "./pages/EmptyPage";
 import TimelineDemo from "./pages/TimelineDemo";
-
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
-import { Redirect } from "react-router-dom";
 import "primereact/resources/primereact.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -47,11 +44,9 @@ import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
 import Register from "./components/Register";
-
-
+import ForgetPassword from "./components/ForgetPassword";
 
 const App = () => {
-
 
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
@@ -62,7 +57,7 @@ const App = () => {
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
 
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(true);
 
     const copyTooltipRef = useRef();
     const location = useLocation();
@@ -83,9 +78,6 @@ const App = () => {
         } else {
             removeClass(document.body, "body-overflow-hidden");
         }
-        // if(localStorage.getItem('token')){
-        //     setLogin(false);
-        // }
     }, [mobileMenuActive]);
 
     useEffect(() => {
@@ -363,7 +355,7 @@ const App = () => {
                     <Route path="/crud" component={Crud} />
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
-                    
+                    <Route path="/forgetpassword" component={ForgetPassword} />
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />
