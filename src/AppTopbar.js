@@ -1,8 +1,21 @@
-import React  from 'react';
+import React ,{useRef} from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { Dropdown } from 'primereact/dropdown';
+import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
+const { NavDropdown , Nav} = require('react-bootstrap');
+
 
 export const AppTopbar = (props) => {
+
+   
+let items = [
+    {label: 'New', icon: 'pi pi-fw pi-plus'},
+    {label: 'Delete', icon: 'pi pi-fw pi-trash'}
+];
+const menu = useRef(null);
 
     return (
         <div className="layout-topbar">
@@ -33,9 +46,13 @@ export const AppTopbar = (props) => {
                         </button>
                     </li>
                     <li>
+
+                    {/* <Dropdown className="pi pi-fw pi-user" options={citySelectItems}></Dropdown> */}
+        
                         <button className="p-link layout-topbar-button" onClick={props.onMobileSubTopbarMenuClick}>
-                            <i className="pi pi-user"/>
-                            <span>Profile</span>c                                               
+                        <Menu model={items} popup ref={menu} />
+                        <Button label="" icon="pi pi-user" onClick={(event) => menu.current.toggle(event)}/>
+                        <span>Profile</span>                                           
                         </button>
                     </li>
                 </ul>

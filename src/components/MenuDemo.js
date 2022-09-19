@@ -49,7 +49,7 @@ const MenuDemo = () => {
 
     const nestedMenuitems = [
         {
-            label: 'Customers',
+            // label: 'Customers',
             icon: 'pi pi-fw pi-table',
             items: [
                 {

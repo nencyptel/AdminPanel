@@ -62,7 +62,7 @@ const App = () => {
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
 
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(true);
 
     const copyTooltipRef = useRef();
     const location = useLocation();
