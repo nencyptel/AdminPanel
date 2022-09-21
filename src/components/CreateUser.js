@@ -12,13 +12,13 @@ const CreateUser = () => {
     const [switchValue3, setSwitchValue3] = useState(false);
     //const [dropdownValue, setDropdownValue] = useState("");
 
-    const drpdwn = (e) =>{   
+    const drpdwn = (e,id) =>{
+        
         console.log(e.target.value)
-        if(e.target.value){
-            setSwitchValue(true);
-        }
-    } 
+        
+           setSwitchValue({...switchValue, [id]: !switchValue[id]});
 
+    } 
     const dropdownValue= [ 'Dashboard','Dashboard1','Dashboard2','Dashboard3' ]
     const Values = [{name : 'Dashboard'},{name :'Dashboard1'},{name :'Dashboard2'},{name:'Dashboard3'}];
   
@@ -52,7 +52,7 @@ const CreateUser = () => {
 
                     <h5>Access to User</h5>
                         <>
-                            <Dropdown onChange={(e) => drpdwn(e)} options={Values} optionLabel="name" placeholder="Select" />
+                            <Dropdown options={Values} optionLabel="name" placeholder="Select" />
                             <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
                         </>
                 
@@ -62,20 +62,23 @@ const CreateUser = () => {
                 <div className="card">
                   {dropdownValue.map((ele,index)=>{
                     return(
-                    <>
+                        <>
                         <h5>{ele}</h5>
-                        <InputSwitch checked={switchValue} value={ele} name="Dashboard"  onChange={(e) => setSwitchValue(e.value)} />
+                        <InputSwitch checked={switchValue} value="Dashboard" name="Dashboard"  onChange={(e) => setSwitchValue({ [index]: !switchValue})} />
                     </>
-                    )})}
+                    )
+                  })}
+                    
 
                     {/* <h5>Dashboard 1</h5>
-                    <InputSwitch checked={switchValue1} value="Dashboard1" name="Dashboard1" onChange={(e) => setSwitchValue1(e.value)} />
+                    <InputSwitch checked={switchValue1} value="Dashboard1" name="Dashboard1" onChange={(e) => setSwitchValue1(e.name)} />
 
                     <h5>Dashboard 2</h5>
-                    <InputSwitch checked={switchValue2} name="Dashboard2" onChange={(e) => setSwitchValue2(e.value)} />
+                    <InputSwitch checked={switchValue3} name="Dashboard2" onChange={(e) => setSwitchValue3(e.name)} />
 
                     <h5>Dashboard 3</h5>
-                    <InputSwitch checked={switchValue3} name="Dashboard3" onChange={(e) => setSwitchValue3(e.value)} />    */}
+                    <InputSwitch checked={switchValue2} name="Dashboard3" onChange={(e) => setSwitchValue2(e.name)} /> */}
+                    
                     
                 </div>
             </div>

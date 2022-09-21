@@ -1,21 +1,50 @@
-import React from 'react'
+import React,{useState} from 'react'
+import axios from 'axios';
 
 const ConfirmPassword = () => {
+
+    const[pswrd,setPswrd] = useState({
+        Password : "",
+        confirmpassword: "",
+    })
+
+    const paswrd=(e)=>{  
+        setPswrd({...pswrd,[e.target.name]:e.target.value});   
+    }
+    
+    const handlesubmit =(e)=>{
+
+        const data={
+            Password : pswrd.Password,
+        }
+
+        var password1=pswrd.Password;
+        var password2=pswrd.confirmpassword;
+        
+        if(password1 == password2){
+            console.log("match");
+            const res=axios.post("",data);
+            console.log(res);
+        }else{
+            console.log("Unmatch");
+        }
+    }
+       
   return (
     <div className="App">
             <div className="container">
                 <div className="row">
-                    <form method="post">
+                    <form method="post" onSubmit={handlesubmit}>
                         <div className="frm">
                             
                             <div className="mb-3" style={{fontSize:"15px"}}>
                                 <label className="mb-4">Password :</label>
-                                <input name="password"  type="text" className="form-control" placeholder="Enter Password" />
+                                <input name="Password"  type="text" value={pswrd.Password} onChange={paswrd} className="form-control" placeholder="Enter Password" />
                             </div>
 
                             <div className="mb-3" style={{fontSize:"15px"}}>
                                 <label className="mb-4">Confirm Password :</label>
-                                <input name="confirmpassword"  type="text" className="form-control" placeholder="Enter Confirm Password" />
+                                <input name="confirmpassword"  type="text" value={pswrd. confirmpassword} onChange={paswrd} className="form-control" placeholder="Enter Confirm Password" />
                             </div>
 
                             <div className="d-grid">
@@ -23,11 +52,6 @@ const ConfirmPassword = () => {
                                     Submit
                                 </button>
                             </div>
-                            {/* <div className="pswrd">
-                                <p className="forgot-password text-left " style={{fontSize:"15px"}}>
-                                    Have'nt an account ? <a href="#/register">Sign up</a>
-                                </p>
-                            </div> */}
                         </div>
                     </form>
                 </div>
