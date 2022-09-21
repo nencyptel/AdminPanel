@@ -26,7 +26,7 @@ const Login = () => {
             Password: user.Password,
         };
 
-        const response = await axios.post("http://192.168.250.1/get/user/login", data);
+        const response = await axios.post("http://192.168.1.107:4000/get/user/login", data);
         console.log(response.data);
         if (response) {
             setUser({
@@ -92,7 +92,7 @@ const Login = () => {
                                     Have'nt an account ? <a href="#/register">Sign up</a>
                                 </p>
                                 <p className="forgot-password ">
-                                    Forgot <a href="/">password?</a>
+                                    Forgot <a href="#/forgetpassword">password?</a>
                                 </p>
                             </div>
                         </div>

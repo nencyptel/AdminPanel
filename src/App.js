@@ -45,6 +45,11 @@ import "./assets/layout/layout.scss";
 import "./App.scss";
 import Register from "./components/Register";
 import ForgetPassword from "./components/ForgetPassword";
+import ConfirmPassword from "./components/ConfirmPassword";
+import Dashboard1 from "./components/Dashboard1";
+import Dashboard2 from "./components/Dashboard2";
+import Dashboard3 from "./components/Dashboard3";
+import CreateUser from "./components/CreateUser";
 
 const App = () => {
 
@@ -172,7 +177,23 @@ const App = () => {
                     icon: "pi pi-fw pi-home",
                     to: "/",
                 },
+                {
+                    label: "Dashboard1",
+                    icon: "pi pi-fw pi-home",
+                    to: "/dashboard1",
+                },
+                {
+                    label: "Dashboard2",
+                    icon: "pi pi-fw pi-home",
+                    to: "/dashboard2",
+                },
+                {
+                    label: "Dashboard3",
+                    icon: "pi pi-fw pi-home",
+                    to: "/dashboard3",
+                },
             ],
+            
         },
         {
             label: "UI Components",
@@ -314,7 +335,7 @@ const App = () => {
         <>
         
         {login ?  <div className={wrapperClass} onClick={onWrapperClick}>
-            
+
             <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
             <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
@@ -324,7 +345,6 @@ const App = () => {
                 <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
             </div>
 
-{/* <Menubar/> */}
             <div className="layout-main-container" >
                 <div className="layout-main">
                     <Route path="/login" component={Login} ></Route>
@@ -333,7 +353,9 @@ const App = () => {
                        component={FormLayoutDemo}>
                     </PrivateRoute>
                     <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    {/* <Route path="/formlayout" <ProtectedRoute Component={FormLayoutDemo}/> /> */}
+                    <Route path="/dashboard1" component={Dashboard1} />
+                    <Route path="/dashboard2" component={Dashboard2} />
+                    <Route path="/dashboard3" component={Dashboard3} />
                     <Route path="/input" component={InputDemo} />
                     <Route path="/floatlabel" component={FloatLabelDemo} />
                     <Route path="/invalidstate" component={InvalidStateDemo} />
@@ -356,6 +378,8 @@ const App = () => {
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                     <Route path="/forgetpassword" component={ForgetPassword} />
+                    <Route path="/confirmpassword" component={ConfirmPassword} />
+                    <Route path="/createuser" component={CreateUser} />
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />
@@ -367,13 +391,13 @@ const App = () => {
                 <div className="layout-mask p-component-overlay"></div>
             </CSSTransition>
         </div> :
-        
-            <Route path="/login" component={Login} />
-  
+            <>
+                <Route path="/login" component={Login} />     
+            </>
+            
         }
-
-        </>
         
+        </> 
     );
 };
 

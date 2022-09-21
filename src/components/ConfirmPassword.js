@@ -1,17 +1,21 @@
 import React from 'react'
 
-const ForgetPassword = () => {
+const ConfirmPassword = () => {
   return (
     <div className="App">
             <div className="container">
                 <div className="row">
                     <form method="post">
                         <div className="frm">
-                            {/* <h3 className="hh3">Recover Password</h3> */}
-                            <p style={{fontSize:"20px",color:"grey"}}>Please enter your email address. You will receive a new password via email.</p>
+                            
                             <div className="mb-3" style={{fontSize:"15px"}}>
-                                <label className="mb-4">Email address :</label>
-                                <input name="Email"  type="email" className="form-control" placeholder="Enter email" />
+                                <label className="mb-4">Password :</label>
+                                <input name="password"  type="text" className="form-control" placeholder="Enter Password" />
+                            </div>
+
+                            <div className="mb-3" style={{fontSize:"15px"}}>
+                                <label className="mb-4">Confirm Password :</label>
+                                <input name="confirmpassword"  type="text" className="form-control" placeholder="Enter Confirm Password" />
                             </div>
 
                             <div className="d-grid">
@@ -19,11 +23,11 @@ const ForgetPassword = () => {
                                     Submit
                                 </button>
                             </div>
-                            <div className="pswrd">
+                            {/* <div className="pswrd">
                                 <p className="forgot-password text-left " style={{fontSize:"15px"}}>
                                     Have'nt an account ? <a href="#/register">Sign up</a>
                                 </p>
-                            </div>
+                            </div> */}
                         </div>
                     </form>
                 </div>
@@ -32,4 +36,4 @@ const ForgetPassword = () => {
   )
 }
 
-export default ForgetPassword
+export default ConfirmPassword
