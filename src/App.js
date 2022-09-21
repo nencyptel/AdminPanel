@@ -8,6 +8,8 @@ import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 
+import ForgetPassword from "./components/ForgetPassword";
+import ChangePassword from "./components/ChangePassword";
 import Dashboard from "./components/Dashboard";
 import ButtonDemo from "./components/ButtonDemo";
 import ChartDemo from "./components/ChartDemo";
@@ -44,7 +46,7 @@ import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
 import Register from "./components/Register";
-import ForgetPassword from "./components/ForgetPassword";
+
 
 const App = () => {
 
@@ -356,6 +358,7 @@ const App = () => {
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                     <Route path="/forgetpassword" component={ForgetPassword} />
+                    <Route path="/passwordreset" component={ChangePassword} />
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />

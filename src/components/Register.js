@@ -103,9 +103,7 @@ const Register = () => {
                                 <p className="forgot-password text-left ">
                                     Already have an account? <a href="#/login">Login</a>
                                 </p>
-                                <p className="forgot-password ">
-                                    Forgot <a href="#/forgetpassword">password?</a>
-                                </p>
+                               
                             </div>
                         </div>
                     </form>

@@ -3,8 +3,14 @@ import "../components/style/login.css";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { Toast } from "primereact/toast";
+import { useDispatch, useSelector } from 'react-redux'
+import { LoginData } from "./Redux/Reducer/LoginSlice";
 
 const Login = () => {
+
+    const { loading, error ,userInfo } = useSelector((state) => state.user);
+
+    const dispatch = useDispatch()
 
     const toast = useRef(null);
 
@@ -25,32 +31,37 @@ const Login = () => {
             Email: user.Email,
             Password: user.Password,
         };
+        dispatch(LoginData(data));
 
-        const response = await axios.post("http://192.168.250.1/get/user/login", data);
-        console.log(response.data);
-        if (response) {
-            setUser({
-                Email: "",
-                Password: "",
-            });
+        // const response = await axios.post("http://localhost:4000/get/user/login", data);
+        // console.log(response.data);
+        // if (response) {
+        //     setUser({
+        //         Email: "",
+        //         Password: "",
+        //     });
 
-            if (response?.data?.status === 200) {
-                console.log("succes");
-                toast.current.show({ severity: "success", summary: "Successful", detail: "Login succesfull", life: 3000 });
-            } else if (response?.data?.status === 401) {
-                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "Wrong password", life: 3000 });
-            } else if (response?.data?.status === 300) {
-                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "The email address is not associated with any account. please check and try again!", life: 3000 });
-            } 
+        
 
-            const token= response?.data?.token?.token;
-            localStorage.setItem('token',token);
-        }
+        //     const token= response?.data?.token?.token;
+        //     localStorage.setItem('token',token);
+        // }
     };
 
    
     useEffect(() => {
      
+        if(userInfo){
+               console.log(userInfo);
+                if (userInfo?.data?.status === 200) {
+                    console.log(userInfo?.data?.msg );
+                toast.current.show({ severity: "success", summary: "Successful", detail: "Login succesfull", life: 3000 });
+            } else if (userInfo?.data?.status === 401) {
+                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "Wrong password", life: 3000 });
+            } else if (userInfo?.data?.status === 300) {
+                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "The email address is not associated with any account. please check and try again!", life: 3000 });
+            } 
+        }
     }, []);
 
 
@@ -92,7 +103,7 @@ const Login = () => {
                                     Have'nt an account ? <a href="#/register">Sign up</a>
                                 </p>
                                 <p className="forgot-password ">
-                                    Forgot <a href="/">password?</a>
+                                    Forgot <a href="#/forgetpassword">password?</a>
                                 </p>
                             </div>
                         </div>

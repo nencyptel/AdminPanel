@@ -8,8 +8,9 @@ import './components/top.css'
 
 export const AppTopbar = (props) => {
 
-    let items = [{label: 'New', icon: 'pi pi-fw pi-plus'},
-                 {label: 'Delete', icon: 'pi pi-fw pi-trash'}];
+             
+    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user'},
+             {label: 'Logout', icon: 'pi pi-fw pi-lock-open'}];
 
     const menu = useRef(null);
     
