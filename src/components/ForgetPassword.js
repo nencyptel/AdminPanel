@@ -28,7 +28,10 @@ function  ForgetPassword() {
 
   return (
     <div className="App">
+
  <Toast ref={toast} />
+
+
             <div className="container">
                 <div className="row">
                     <form method="post" onSubmit={handlesubmit}>

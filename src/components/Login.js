@@ -33,6 +33,7 @@ const Login = () => {
         };
         dispatch(LoginData(data));
 
+
         // const response = await axios.post("http://localhost:4000/get/user/login", data);
         // console.log(response.data);
         // if (response) {
@@ -40,12 +41,7 @@ const Login = () => {
         //         Email: "",
         //         Password: "",
         //     });
-
-        
-
-        //     const token= response?.data?.token?.token;
-        //     localStorage.setItem('token',token);
-        // }
+ 
     };
 
    
