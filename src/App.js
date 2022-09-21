@@ -46,16 +46,13 @@ import "./assets/demo/Demos.scss";
 import "./assets/layout/layout.scss";
 import "./App.scss";
 import Register from "./components/Register";
-<<<<<<< HEAD
-
-=======
 import ForgetPassword from "./components/ForgetPassword";
 import ConfirmPassword from "./components/ConfirmPassword";
 import Dashboard1 from "./components/Dashboard1";
 import Dashboard2 from "./components/Dashboard2";
 import Dashboard3 from "./components/Dashboard3";
 import CreateUser from "./components/CreateUser";
->>>>>>> fa6940877fde1304cdf0b417009027279da531da
+
 
 const App = () => {
 
@@ -384,12 +381,10 @@ const App = () => {
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                     <Route path="/forgetpassword" component={ForgetPassword} />
-<<<<<<< HEAD
-                    <Route path="/passwordreset" component={ChangePassword} />
-=======
+
                     <Route path="/confirmpassword" component={ConfirmPassword} />
                     <Route path="/createuser" component={CreateUser} />
->>>>>>> fa6940877fde1304cdf0b417009027279da531da
+
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />
