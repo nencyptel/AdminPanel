@@ -379,7 +379,7 @@ const App = () => {
                     <Route path="/empty" component={EmptyPage} />
                     <Route path="/documentation" component={Documentation} />
                     <Route path="/forgetpassword" component={ForgetPassword} />
-                    <Route path="/confirmpassword" component={ConfirmPassword} />
+                    <Route path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
                     <Route path="/createuser" component={CreateUser} />
 
                 </div>

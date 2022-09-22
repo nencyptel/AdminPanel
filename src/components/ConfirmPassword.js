@@ -1,7 +1,14 @@
-import React,{useState} from 'react'
+
+import React , {useState} from 'react'
 import axios from 'axios';
+import { useHistory, useParams } from 'react-router';
 
 const ConfirmPassword = () => {
+
+    const params = useParams();
+    console.log(params._id);
+    console.log(params.token);
+
 
     const[pswrd,setPswrd] = useState({
         Password : "",
@@ -10,21 +17,33 @@ const ConfirmPassword = () => {
 
     const paswrd=(e)=>{  
         setPswrd({...pswrd,[e.target.name]:e.target.value});   
+
+        console.log(e.target.value)
+
     }
     
     const handlesubmit =(e)=>{
 
+
+        e.preventDefault();
+
+        console.log("hello");
+    
         const data={
             Password : pswrd.Password,
         }
+
 
         var password1=pswrd.Password;
         var password2=pswrd.confirmpassword;
         
         if(password1 == password2){
-            console.log("match");
-            const res=axios.post("",data);
+
+        
+            const res=axios.post(`http://localhost:4000/changepassword/${params._id}/${params.token}`,data);
             console.log(res);
+            console.log("match");
+            
         }else{
             console.log("Unmatch");
         }
@@ -48,7 +67,7 @@ const ConfirmPassword = () => {
                             </div>
 
                             <div className="d-grid">
-                                <button type="submit" className="btn-login">
+                                <button type="submit" className="btn-login" onSubmit={handlesubmit}>
                                     Submit
                                 </button>
                             </div>
