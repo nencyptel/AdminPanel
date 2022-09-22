@@ -65,7 +65,7 @@ const CreateUser = () => {
                         <>
                         <h5>{ele}</h5>
                         <InputSwitch checked={switchValue} value="Dashboard" name="Dashboard"  onChange={(e) => setSwitchValue({ [index]: !switchValue})} />
-                    </>
+                        </>
                     )
                   })}
                     
