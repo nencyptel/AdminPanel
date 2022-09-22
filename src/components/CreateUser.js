@@ -7,22 +7,22 @@ import { MultiSelect } from "primereact/multiselect";
 
 const CreateUser = () => {
     const [switchValue, setSwitchValue] = useState([
-      
+        { name: "Dashboard", code: "AU" , Dashboard:true},
+        { name: "Dashboard1", code: "BR" , Dashboard:true},
+        { name: "Dashboard2", code: "CN" , Dashboard:true},
+        { name: "Dashboard3", code: "EG", Dashboard:true },
     ]);
-    const [multiselectValue, setMultiselectValue] = useState([]);
+    const [multiselectValue, setMultiselectValue] = useState([
+        { name: "Dashboard", code: "AU" , Dashboard:true},
+        { name: "Dashboard1", code: "BR" , Dashboard:true},
+        { name: "Dashboard2", code: "CN" , Dashboard:true},
+        { name: "Dashboard3", code: "EG", Dashboard:true },
+    ]);
 
     const selectedItemTemplate = (option) => {
-        if (option) {
-            // const id = option.name;
-            // console.log(id);
-            // setSwitchValue((switchValue) => ({
-            //     ...switchValue,
-            //     [id]: !switchValue[id]
-            // }));
-
+        if (option) {         
             return (
                 <div className="inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2">
-                 
                     <span>{option.name}</span>
                 </div>
             );
@@ -34,52 +34,44 @@ const CreateUser = () => {
     const itemTemplate = (option) => {
         return (
             <div className="flex align-items-center">
-             
                 <span>{option.name}</span>
             </div>
         );
     };
 
     //const [dropdownValue, setDropdownValue] = useState("");
-    const drpdwn = (e, index) => {};
-    
+    const drpdwn = (e, index) => {
+        console.log( "helo")
+    };
+
     useEffect(() => {
         console.log(multiselectValue);
-        const updatedData = multiselectValue.map((item, idx) => {
-            const index=item.name;
+        const updatedata=  multiselectValue.map((item, idx) => {
+            const index = item.name;
+             //return index;
+
             if(index){
-                setSwitchValue(
-                {
-                    ...switchValue,
-                      [index]: !switchValue[index],
-                 });
+                
+                setSwitchValue((switchValue) => ({ ...switchValue, [index]: switchValue[index]=true }));
             }
-            return item;
-          });
-           console.log(updatedData +"update")
-          
-    //   const data=  multiselectValue.map((id) =>{
-    //         const index=id.name;
-    //          return {
-    //             ...switchValue,
-    //             [index]: !switchValue[index],
-    //          }
-    //         // setSwitchValue((switchValue) => ({            
-               
-    //         // }))
-    //         // console.log(switchValue)
-    //         return id
-    // });
+            else if(switchValue.name != index){
+         
+                setSwitchValue((switchValue) => ({ ...switchValue, [index]: switchValue[index]=false }));
+            }
        
-    }, [multiselectValue]);
+        });
+          console.log(switchValue.Dashboard +"update")
+     
+          //setSwitchValue((switchValue) => ({ ...switchValue, [updatedata]: switchValue[updatedata]=true }))
+    }, [multiselectValue ]);
 
     const HandleAcces = (e) => {
         const arr = e.target.value;
 
         setMultiselectValue(e.target.value);
 
-        // const id = e.target.value.name;
-        // console.log(e.target.value.name);
+        // const id = e.target.value;
+        // // console.log(e.target.value.name);
         // setSwitchValue((switchValue) => ({
         //     ...switchValue,
         //     [id]: !switchValue[id]
@@ -87,10 +79,10 @@ const CreateUser = () => {
     };
 
     const multiselectValues = [
-        { name: "Dashboard", code: "AU" },
-        { name: "Dashboard1", code: "BR" },
-        { name: "Dashboard2", code: "CN" },
-        { name: "Dashboard3", code: "EG" },
+        { name: "Dashboard", code: "AU" , Dashboard:true},
+        { name: "Dashboard1", code: "BR" , Dashboard:true},
+        { name: "Dashboard2", code: "CN" , Dashboard:true},
+        { name: "Dashboard3", code: "EG", Dashboard:true },
     ];
     const dropdownValue = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
     const Values = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
@@ -122,10 +114,10 @@ const CreateUser = () => {
                         </span>
                         <InputText placeholder="Password" />
                     </div>
-                  
+
                     <h5>Access to User</h5>
                     <>
-                    <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} />
+                        <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} />
                         <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
                     </>
                 </div>
@@ -136,7 +128,7 @@ const CreateUser = () => {
                         return (
                             <>
                                 <h5>{ele.name}</h5>
-                                <InputSwitch checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e, index)} />
+                                <InputSwitch key={index} checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => console.log(e.target.checked)} />
                             </>
                         );
                     })}
