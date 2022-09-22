@@ -1,27 +1,100 @@
-import React , {useState}from 'react';
-import { InputText } from 'primereact/inputtext';
-import { InputSwitch } from 'primereact/inputswitch';
-import { Dropdown } from 'primereact/dropdown';
-import { Button } from 'primereact/button';
+import React, { useState, useEffect } from "react";
+import { InputText } from "primereact/inputtext";
+import { InputSwitch } from "primereact/inputswitch";
+import { Dropdown } from "primereact/dropdown";
+import { Button } from "primereact/button";
+import { MultiSelect } from "primereact/multiselect";
 
 const CreateUser = () => {
+    const [switchValue, setSwitchValue] = useState([
+      
+    ]);
+    const [multiselectValue, setMultiselectValue] = useState([]);
 
-    const [switchValue, setSwitchValue] = useState(false);
-    const [switchValue1, setSwitchValue1] = useState(false);
-    const [switchValue2, setSwitchValue2] = useState(false);
-    const [switchValue3, setSwitchValue3] = useState(false);
+    const selectedItemTemplate = (option) => {
+        if (option) {
+            // const id = option.name;
+            // console.log(id);
+            // setSwitchValue((switchValue) => ({
+            //     ...switchValue,
+            //     [id]: !switchValue[id]
+            // }));
+
+            return (
+                <div className="inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2">
+                 
+                    <span>{option.name}</span>
+                </div>
+            );
+        }
+
+        return "Select Countries";
+    };
+
+    const itemTemplate = (option) => {
+        return (
+            <div className="flex align-items-center">
+             
+                <span>{option.name}</span>
+            </div>
+        );
+    };
+
     //const [dropdownValue, setDropdownValue] = useState("");
+    const drpdwn = (e, index) => {};
+    
+    useEffect(() => {
+        console.log(multiselectValue);
+        const updatedData = multiselectValue.map((item, idx) => {
+            const index=item.name;
+            if(index){
+                setSwitchValue(
+                {
+                    ...switchValue,
+                      [index]: !switchValue[index],
+                 });
+            }
+            return item;
+          });
+           console.log(updatedData +"update")
+          
+    //   const data=  multiselectValue.map((id) =>{
+    //         const index=id.name;
+    //          return {
+    //             ...switchValue,
+    //             [index]: !switchValue[index],
+    //          }
+    //         // setSwitchValue((switchValue) => ({            
+               
+    //         // }))
+    //         // console.log(switchValue)
+    //         return id
+    // });
+       
+    }, [multiselectValue]);
 
-    const drpdwn = (e,id) =>{
-        
-        console.log(e.target.value)
-        
-           setSwitchValue({...switchValue, [id]: !switchValue[id]});
+    const HandleAcces = (e) => {
+        const arr = e.target.value;
 
-    } 
-    const dropdownValue= [ 'Dashboard','Dashboard1','Dashboard2','Dashboard3' ]
-    const Values = [{name : 'Dashboard'},{name :'Dashboard1'},{name :'Dashboard2'},{name:'Dashboard3'}];
-  
+        setMultiselectValue(e.target.value);
+
+        // const id = e.target.value.name;
+        // console.log(e.target.value.name);
+        // setSwitchValue((switchValue) => ({
+        //     ...switchValue,
+        //     [id]: !switchValue[id]
+        // }));
+    };
+
+    const multiselectValues = [
+        { name: "Dashboard", code: "AU" },
+        { name: "Dashboard1", code: "BR" },
+        { name: "Dashboard2", code: "CN" },
+        { name: "Dashboard3", code: "EG" },
+    ];
+    const dropdownValue = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
+    const Values = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
+
     return (
         <div className="grid p-fluid">
             <div className="col-12 md:col-6">
@@ -49,26 +122,24 @@ const CreateUser = () => {
                         </span>
                         <InputText placeholder="Password" />
                     </div>
-
+                  
                     <h5>Access to User</h5>
-                        <>
-                            <Dropdown options={Values} optionLabel="name" placeholder="Select" />
-                            <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
-                        </>
-                
+                    <>
+                    <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} />
+                        <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
+                    </>
                 </div>
             </div>
             <div className="col-12 md:col-6">
                 <div className="card">
-                  {dropdownValue.map((ele,index)=>{
-                    return(
-                        <>
-                        <h5>{ele}</h5>
-                        <InputSwitch checked={switchValue} value="Dashboard" name="Dashboard"  onChange={(e) => setSwitchValue({ [index]: !switchValue})} />
-                    </>
-                    )
-                  })}
-                    
+                    {dropdownValue.map((ele, index) => {
+                        return (
+                            <>
+                                <h5>{ele.name}</h5>
+                                <InputSwitch checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e, index)} />
+                            </>
+                        );
+                    })}
 
                     {/* <h5>Dashboard 1</h5>
                     <InputSwitch checked={switchValue1} value="Dashboard1" name="Dashboard1" onChange={(e) => setSwitchValue1(e.name)} />
@@ -78,12 +149,10 @@ const CreateUser = () => {
 
                     <h5>Dashboard 3</h5>
                     <InputSwitch checked={switchValue2} name="Dashboard3" onChange={(e) => setSwitchValue2(e.name)} /> */}
-                    
-                    
                 </div>
             </div>
-        </div >
+        </div>
     );
-}
+};
 
 export default CreateUser;
