@@ -1,89 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
-import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { MultiSelect } from "primereact/multiselect";
 
 const CreateUser = () => {
-    const [switchValue, setSwitchValue] = useState([
-      
-    ]);
+    const [switchValue, setSwitchValue] = useState([]);
     const [multiselectValue, setMultiselectValue] = useState([]);
 
     const selectedItemTemplate = (option) => {
         if (option) {
-            // const id = option.name;
-            // console.log(id);
-            // setSwitchValue((switchValue) => ({
-            //     ...switchValue,
-            //     [id]: !switchValue[id]
-            // }));
-
             return (
                 <div className="inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2">
-                 
                     <span>{option.name}</span>
                 </div>
             );
         }
-
-        return "Select Countries";
+        return "Select";
     };
 
     const itemTemplate = (option) => {
         return (
             <div className="flex align-items-center">
-             
                 <span>{option.name}</span>
             </div>
         );
     };
 
-    //const [dropdownValue, setDropdownValue] = useState("");
     const drpdwn = (e, index) => {};
     
     useEffect(() => {
         console.log(multiselectValue);
         const updatedData = multiselectValue.map((item, idx) => {
-            const index=item.name;
+            const index = item.name;
             if(index){
-                setSwitchValue(
-                {
-                    ...switchValue,
-                      [index]: !switchValue[index],
-                 });
             }
-            return item;
+            return item.name
           });
-           console.log(updatedData +"update")
+
           
-    //   const data=  multiselectValue.map((id) =>{
-    //         const index=id.name;
-    //          return {
-    //             ...switchValue,
-    //             [index]: !switchValue[index],
-    //          }
-    //         // setSwitchValue((switchValue) => ({            
-               
-    //         // }))
-    //         // console.log(switchValue)
-    //         return id
-    // });
+          setSwitchValue(updatedData);
+         
        
     }, [multiselectValue]);
-
+    console.log(switchValue +"update")
     const HandleAcces = (e) => {
-        const arr = e.target.value;
-
         setMultiselectValue(e.target.value);
-
-        // const id = e.target.value.name;
-        // console.log(e.target.value.name);
-        // setSwitchValue((switchValue) => ({
-        //     ...switchValue,
-        //     [id]: !switchValue[id]
-        // }));
     };
 
     const multiselectValues = [
@@ -93,7 +55,7 @@ const CreateUser = () => {
         { name: "Dashboard3", code: "EG" },
     ];
     const dropdownValue = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
-    const Values = [{ name: "Dashboard" }, { name: "Dashboard1" }, { name: "Dashboard2" }, { name: "Dashboard3" }];
+    
 
     return (
         <div className="grid p-fluid">
@@ -137,19 +99,10 @@ const CreateUser = () => {
                         return (
                             <>
                                 <h5>{ele.name}</h5>
-                                <InputSwitch checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e, index)} />
+                                <InputSwitch checked={switchValue.includes(ele.name)} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e, index)} />
                             </>
                         );
                     })}
-
-                    {/* <h5>Dashboard 1</h5>
-                    <InputSwitch checked={switchValue1} value="Dashboard1" name="Dashboard1" onChange={(e) => setSwitchValue1(e.name)} />
-
-                    <h5>Dashboard 2</h5>
-                    <InputSwitch checked={switchValue3} name="Dashboard2" onChange={(e) => setSwitchValue3(e.name)} />
-
-                    <h5>Dashboard 3</h5>
-                    <InputSwitch checked={switchValue2} name="Dashboard3" onChange={(e) => setSwitchValue2(e.name)} /> */}
                 </div>
             </div>
         </div>

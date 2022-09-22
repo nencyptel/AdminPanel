@@ -1,7 +1,7 @@
 
 import React , {useState} from 'react'
 import axios from 'axios';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 const ConfirmPassword = () => {
 
@@ -37,7 +37,7 @@ const ConfirmPassword = () => {
         var password1=pswrd.Password;
         var password2=pswrd.confirmpassword;
         
-        if(password1 == password2){
+        if(password1 === password2){
 
         
             const res=axios.post(`http://localhost:4000/changepassword/${params._id}/${params.token}`,data);
@@ -63,7 +63,7 @@ const ConfirmPassword = () => {
 
                             <div className="mb-3" style={{fontSize:"15px"}}>
                                 <label className="mb-4">Confirm Password :</label>
-                                <input name="confirmpassword"  type="text" value={pswrd. confirmpassword} onChange={paswrd} className="form-control" placeholder="Enter Confirm Password" />
+                                <input name="confirmpassword"  type="text" value={pswrd.confirmpassword} onChange={paswrd} className="form-control" placeholder="Enter Confirm Password" />
                             </div>
 
                             <div className="d-grid">
