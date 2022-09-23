@@ -11,10 +11,14 @@ export const LoginData = createAsyncThunk(
         data,
    
         )
-        console.log(res);
+        const token=res.data?.token?.token
+
         // store user's token in local storage
-        localStorage.setItem('userToken', res.data.token.token)
-        return res
+        if(localStorage.setItem('userToken', token)){
+          return res;
+        }
+    
+
       } catch (error) {
         // return custom error message from API if any
         
@@ -25,15 +29,19 @@ export const LoginData = createAsyncThunk(
   )
 
   // initialize userToken from local storage
-const userToken = localStorage.getItem('token')
-? localStorage.getItem('token')
+const userToken = localStorage.getItem('userToken')
+? localStorage.getItem('userToken')
 : null
+
+
+console.log(userToken+"token")
 
 const initialState = {
 loading: false,
 userInfo: null,
 userToken,
 error: null,
+is_loggin:false,
 success: false,
 }
 
@@ -50,12 +58,16 @@ extraReducers: {
   [LoginData.fulfilled]: (state, { payload }) => {
     state.loading = false
     state.userInfo = payload
-    state.userToken = payload.userToken
+    state.is_loggin=true
+    state.userToken = localStorage.getItem('userToken')
+    ? localStorage.getItem('userToken')
+    : null
   },
   [LoginData.rejected]: (state, { payload }) => {
     state.loading = false
     state.error = payload
   },
+
 },
 });
 
