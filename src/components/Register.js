@@ -33,18 +33,10 @@ const Register = () => {
             Lastname: user.Lastname,
         };
 
+        setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
+
         const response=await axios.post("http://localhost:4000/create/user", data);
         console.log(response);
-
-
-       
-        // if (dispatch(LoginData(data))) {
-        //     setUser({
-        //         Email: "",
-        //         Password: "",
-        //     });
-
-        // }
     };
 
     return (
@@ -57,7 +49,7 @@ const Register = () => {
                             <h3 className="hh3">Sign Up</h3>
                             {/* { login +"nency"} */}
                             <div className="mb-3">
-                                <label className="mb-4">UserName </label>
+                                <label className="mb-4">Username </label>
                                 <input name="Username" value={user.Username} onChange={handleChange} type="text" className="form-control" placeholder="Enter username" />
                             </div>
                             <div className="mb-3">
@@ -103,13 +95,6 @@ const Register = () => {
                                 <p className="forgot-password text-left ">
                                     Already have an account? <a href="#/login">Login</a>
                                 </p>
-
-                               
-
-                                {/* <p className="forgot-password ">
-                                    Forgot <a href="#/forgetpassword">password?</a>
-                                </p> */}
-
                             </div>
                         </div>
                     </form>

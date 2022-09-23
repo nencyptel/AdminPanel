@@ -9,7 +9,7 @@ import './components/top.css'
 export const AppTopbar = (props) => {
 
              
-    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},
+    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/dashboard'}},
                  {label: 'Logout', icon: 'pi pi-fw pi-lock', command: () => {window.location.href='#/login'}},
                  {label: 'Login', icon: 'pi pi-fw pi-lock-open', command: () => {window.location.href='#/login'}}];
 

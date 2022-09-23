@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../components/style/login.css";
-import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { Toast } from "primereact/toast";
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,7 +7,7 @@ import { LoginData } from "./Redux/Reducer/LoginSlice";
 
 const Login = () => {
 
-    const { loading, error ,userInfo } = useSelector((state) => state.user);
+    const { userInfo } = useSelector((state) => state.user);
 
     const dispatch = useDispatch()
 
@@ -26,13 +25,13 @@ const Login = () => {
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-
+       
         const data = {
             Email: user.Email,
             Password: user.Password,
         };
-        dispatch(LoginData(data));
-
+        if(dispatch(LoginData(data)))
+        {setUser({Email :"",Password :""})}
 
         // const response = await axios.post("http://localhost:4000/get/user/login", data);
         // console.log(response.data);
@@ -90,9 +89,7 @@ const Login = () => {
                             </div>
 
                             <div className="d-grid">
-                                <button type="submit" className="btn-login">
-                                    Submit
-                                </button>
+                                <button type="submit" className="btn-login">Submit</button>
                             </div>
                             <div className="pswrd">
                                 <p className="forgot-password text-left ">

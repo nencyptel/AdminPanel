@@ -1,28 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from'axios';
-import { Post } from "../../services/api.service";
-
-// export const LoginData = createAsyncThunk(
-//     "user/LoginData",
-//     async (data) => {
-//       return await axios.post("http://localhost:4000/get/user/login", data).then((res) =>
-//        //console.log(res)
- 
-//        res.data
-      
-//       );
-    
-//     }
-//   );
 
 export const LoginData = createAsyncThunk(
     'user/login',
     async (data, { rejectWithValue }) => {
       try {
-        // configure header's Content-Type as JSON
      
         const res = await axios.post(
-          'http://localhost:4000/get/user/login',
+          'http://192.168.250.1:4000/get/user/login',
         data,
    
         )
@@ -71,33 +56,8 @@ extraReducers: {
     state.loading = false
     state.error = payload
   },
-  // register user reducer...
 },
 });
 
-
-// const loginServiceSlice = createSlice({
-//     name: 'user',
-//     initialState: {
-//         data: [],
-//         status: null,
-//     },
-
-//     extraReducers: {
-//         [LoginData.pending]: (state, action) => {
-//             state.status = 'loading'
-//         },
-//         [LoginData.fulfilled]: (state, { payload }) => {
-         
-//             state.status = 'success'
-//             state.data = payload
-//             // window.location.reload();
-//         },
-//         [LoginData.rejected]: (state, action) => {
-//             state.status = 'failed'
-          
-//         },
-//     },
-// })
 
 export default loginServiceSlice.reducer;
