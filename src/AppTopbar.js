@@ -18,7 +18,10 @@ export const AppTopbar = (props) => {
     const [token , setToken]=useState();
        
              
-    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},
+
+    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/dashboard'}},
+                 {label: 'Logout', icon: 'pi pi-fw pi-lock', command: () => {window.location.href='#/login'}},
+
                  {label: 'Login', icon: 'pi pi-fw pi-lock-open', command: () => {window.location.href='#/login'}}];
 
     let loginitems= [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},

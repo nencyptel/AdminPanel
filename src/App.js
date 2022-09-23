@@ -50,6 +50,7 @@ import Dashboard1 from "./components/Dashboard1";
 import Dashboard2 from "./components/Dashboard2";
 import Dashboard3 from "./components/Dashboard3";
 import CreateUser from "./components/CreateUser";
+import Table from "./components/Table";
 
 
 const App = () => {
@@ -206,6 +207,7 @@ const App = () => {
                 { label: "Invalid State", icon: "pi pi-fw pi-exclamation-circle", to: "invalidstate" },
                 { label: "Button", icon: "pi pi-fw pi-mobile", to: "/button" },
                 { label: "Table", icon: "pi pi-fw pi-table", to: "/table" },
+                { label: "Data - Table", icon: "pi pi-fw pi-table", to: "/table1" },
                 { label: "List", icon: "pi pi-fw pi-list", to: "/list" },
                 { label: "Tree", icon: "pi pi-fw pi-share-alt", to: "/tree" },
                 { label: "Panel", icon: "pi pi-fw pi-tablet", to: "/panel" },
@@ -353,12 +355,14 @@ const App = () => {
                     <PrivateRoute path="/formlayout"
                        component={FormLayoutDemo}>
                     </PrivateRoute>
+
                     <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
                     <PrivateRoute path="/dashboard1" component={Dashboard1} />
                     <PrivateRoute path="/dashboard2" component={Dashboard2} />
                     <PrivateRoute path="/dashboard3" component={Dashboard3} />
                     <PrivateRoute path="/input" component={InputDemo} />
                     <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
+
                     <Route path="/invalidstate" component={InvalidStateDemo} />
                     <Route path="/button" component={ButtonDemo} />
                     <Route path="/table" component={TableDemo} />
@@ -381,7 +385,7 @@ const App = () => {
                     <Route path="/forgetpassword" component={ForgetPassword} />
                     <Route path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
                     <Route path="/createuser" component={CreateUser} />
-
+                    <Route path="/table1" component={Table} />
                 </div>
 
                 <AppFooter layoutColorMode={layoutColorMode} />
