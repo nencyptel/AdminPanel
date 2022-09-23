@@ -354,11 +354,11 @@ const App = () => {
                        component={FormLayoutDemo}>
                     </PrivateRoute>
                     <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/dashboard1" component={Dashboard1} />
-                    <Route path="/dashboard2" component={Dashboard2} />
-                    <Route path="/dashboard3" component={Dashboard3} />
-                    <Route path="/input" component={InputDemo} />
-                    <Route path="/floatlabel" component={FloatLabelDemo} />
+                    <PrivateRoute path="/dashboard1" component={Dashboard1} />
+                    <PrivateRoute path="/dashboard2" component={Dashboard2} />
+                    <PrivateRoute path="/dashboard3" component={Dashboard3} />
+                    <PrivateRoute path="/input" component={InputDemo} />
+                    <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
                     <Route path="/invalidstate" component={InvalidStateDemo} />
                     <Route path="/button" component={ButtonDemo} />
                     <Route path="/table" component={TableDemo} />

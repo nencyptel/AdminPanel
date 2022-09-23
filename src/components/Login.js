@@ -5,11 +5,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { Toast } from "primereact/toast";
 import { useDispatch, useSelector } from 'react-redux'
 import { LoginData } from "./Redux/Reducer/LoginSlice";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
 
-    const { loading, error ,userInfo } = useSelector((state) => state.user);
+    const history = useHistory();
 
+    const userInfo  = useSelector((state) => state.user.userInfo);
+    const userToken=useSelector((state) => state?.user?.userToken);
+    
     const dispatch = useDispatch()
 
     const toast = useRef(null);
@@ -31,8 +35,15 @@ const Login = () => {
             Email: user.Email,
             Password: user.Password,
         };
-        dispatch(LoginData(data));
+         if(dispatch(LoginData(data))){
 
+            setUser({
+                Email: "",
+               Password: "",
+            });
+         
+          
+         }
 
         // const response = await axios.post("http://localhost:4000/get/user/login", data);
         // console.log(response.data);
@@ -41,24 +52,26 @@ const Login = () => {
         //         Email: "",
         //         Password: "",
         //     });
- 
-    };
-
+   
+   
+}
    
     useEffect(() => {
      
-        if(userInfo){
-               console.log(userInfo);
-                if (userInfo?.data?.status === 200) {
-                    console.log(userInfo?.data?.msg );
-                toast.current.show({ severity: "success", summary: "Successful", detail: "Login succesfull", life: 3000 });
-            } else if (userInfo?.data?.status === 401) {
-                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "Wrong password", life: 3000 });
-            } else if (userInfo?.data?.status === 300) {
-                toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "The email address is not associated with any account. please check and try again!", life: 3000 });
-            } 
+        if(userToken){
+            console.log(userToken);
         }
-    }, []);
+        if(userInfo){ 
+        if (userInfo?.data?.status === 200) {
+            history.push("/");
+            toast.current.show({ severity: "success", summary: "Successful", detail: "Login succesfull", life: 3000 });
+        } else if (userInfo?.data?.status === 401) {
+            toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "Wrong password", life: 3000 });
+        } else if (userInfo?.data?.status === 300) {
+            toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: "The email address is not associated with any account. please check and try again!", life: 3000 });
+        } 
+    }
+    }, [userInfo,userToken , dispatch]);
 
 
     return (

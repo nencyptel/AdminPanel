@@ -5,8 +5,10 @@ import { Chart } from 'primereact/chart';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ProductService } from '../service/ProductService';
+import { useDispatch, useSelector } from 'react-redux'
 
 const lineData = {
+    
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
         {
@@ -29,6 +31,8 @@ const lineData = {
 };
 
 const Dashboard = (props) => {
+ 
+
     const [products, setProducts] = useState(null);
     const menu1 = useRef(null);
     const menu2 = useRef(null);
