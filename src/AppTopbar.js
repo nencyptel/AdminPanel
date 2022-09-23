@@ -20,8 +20,6 @@ export const AppTopbar = (props) => {
              
 
     let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/dashboard'}},
-                 {label: 'Logout', icon: 'pi pi-fw pi-lock', command: () => {window.location.href='#/login'}},
-
                  {label: 'Login', icon: 'pi pi-fw pi-lock-open', command: () => {window.location.href='#/login'}}];
 
     let loginitems= [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},
@@ -30,7 +28,7 @@ export const AppTopbar = (props) => {
      const logout =(e)=>{ 
 
           if(localStorage.removeItem('userToken')) {
-            history.push("/login"); 
+              history.push("/login"); 
           }
       
            //navigate('#/login')

@@ -14,7 +14,7 @@ const CreateUser = () => {
         { name: 'Dashboard 2', code: 'LDN' },
         { name: 'Dashboard 3', code: 'IST' },
 
-   
+    ] 
     return (
         <div className="grid p-fluid">
             <div className="col-12 md:col-6">
