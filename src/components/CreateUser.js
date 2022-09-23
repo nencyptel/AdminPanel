@@ -5,15 +5,37 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 
 const CreateUser = () => {
-    const [switchValue, setSwitchValue] = useState([]);
+    const [switchValue, setSwitchValue] = useState({
+        Dashboard : false,
+        Dashboard1 :false,
+        Dashboard2 :false,
+        Dashboard3 :false,
+    });
     const [dropdownValue, setDropdownValue] = useState(null);
 
+    const drpdwn = (e,index)=> {
+
+        console.log(e.target.name)
+        const id = e.target.name
+        setSwitchValue({...switchValue,[id]:!switchValue[id]})
+    }
+
+    const dropdown = (e)=>{
+        console.log(e.target.value.name);
+
+        if(e.target.value.name){
+            const id = e.target.value.name
+            setSwitchValue({[id]:switchValue[id]=true})
+
+        }
+        
+    }
     const dropdownValues = [
         { name: 'Dashboard', code: 'NY' },
         { name: 'Dashboard 1', code: 'RM' },
         { name: 'Dashboard 2', code: 'LDN' },
         { name: 'Dashboard 3', code: 'IST' },
-
+    ]
    
     return (
         <div className="grid p-fluid">
@@ -46,9 +68,7 @@ const CreateUser = () => {
                     <h5>First Page</h5>
                     <>
                     {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
-                    <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={dropdownValues} optionLabel="name" placeholder="Select" />
-
-        
+                    <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues} optionLabel="name" placeholder="Select"  />
                         <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
                     </>
                 </div>
@@ -56,17 +76,16 @@ const CreateUser = () => {
             <div className="col-12 md:col-6">
                 <div className="card">
 
-                    {/* {dropdownValues.map((ele, index) => {
+                    {dropdownValues.map((ele, index) => {
                         return (
                             <>
                                 <h5>{ele.name}</h5>
-                                <InputSwitch checked={switchValue.includes(ele.name)} value={ele.name} name={ele.name} />
-
+                                <InputSwitch checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e,index)} />
                             </>
                         );
-                    })} */}
+                    })}
 
-                    <h5>Dashboard</h5>
+                    {/* <h5>Dashboard</h5>
                     <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
 
                     <h5>Dashboard 1</h5>
@@ -76,7 +95,7 @@ const CreateUser = () => {
                     <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
 
                     <h5>Dashboard 3</h5>
-                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
+                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} /> */}
 
                 </div>
             </div>
