@@ -13,8 +13,8 @@ const CreateUser = () => {
         { name: 'Dashboard 1', code: 'RM' },
         { name: 'Dashboard 2', code: 'LDN' },
         { name: 'Dashboard 3', code: 'IST' },
-    ];
 
+   
     return (
         <div className="grid p-fluid">
             <div className="col-12 md:col-6">
@@ -47,6 +47,8 @@ const CreateUser = () => {
                     <>
                     {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
                     <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={dropdownValues} optionLabel="name" placeholder="Select" />
+
+        
                         <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
                     </>
                 </div>
@@ -59,6 +61,7 @@ const CreateUser = () => {
                             <>
                                 <h5>{ele.name}</h5>
                                 <InputSwitch checked={switchValue.includes(ele.name)} value={ele.name} name={ele.name} />
+
                             </>
                         );
                     })} */}
