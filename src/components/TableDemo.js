@@ -99,7 +99,6 @@ const TableDemo = () => {
         });
     }
 
-
     const countryBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -367,6 +366,7 @@ const TableDemo = () => {
         </div>
     );
 }
+
 
 const comparisonFn = function (prevProps, nextProps) {
     return prevProps.location.pathname === nextProps.location.pathname;

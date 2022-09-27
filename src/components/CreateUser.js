@@ -3,6 +3,8 @@ import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
+import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const CreateUser = () => {
     const [switchValue, setSwitchValue] = useState({
@@ -36,17 +38,62 @@ const CreateUser = () => {
         { name: 'Dashboard 2', code: 'LDN' },
         { name: 'Dashboard 3', code: 'IST' },
     ]
-   
+
+    const [user, setUser] = useState({
+        Email: "",
+        Password: "",
+        Username: "",
+        Phone: "",
+        About: "",
+        Firstname: "",
+        Lastname: "",
+    });
+
+    const handleChange = (e) => {
+        
+       console.log(e.target.value)
+        setUser({ ...user, [e.target.name]: e.target.value });
+    };
+
+    const handlesubmit = async (e) => {
+        console.log("rhfdj")
+        e.preventDefault();
+
+        const data = {
+            Email: user.Email,
+            Password: user.Password,
+            Username: user.Username,
+            Phone: user.Phone,
+            About: user.About,
+            Firstname: user.Firstname,
+            Lastname: user.Lastname,
+        };
+        const response=await axios.post("http://localhost:4001/create/user", data);
+        console.log(response);
+        if(response) {
+            setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
+        }
+    };
+
     return (
-        <div className="grid p-fluid">
+        <div className="grid p-fluid">   
             <div className="col-12 md:col-6">
-                <div className="card">
-                    <h5>Username </h5>
+            <form method="post" onSubmit={handlesubmit}>
+                <div className="card">        
+                 <h5>Username </h5>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
                         </span>
-                        <InputText placeholder="Username" />
+                        <InputText placeholder="Username" name="Username" value={user.Username} onChange={handleChange}/>
+                    </div>
+
+                    <h5>Name </h5>
+                    <div className="p-inputgroup">
+                        <span className="p-inputgroup-addon">
+                            <i className="pi pi-id-card"></i>
+                        </span>
+                        <InputText placeholder="Name" />
                     </div>
 
                     <h5>Email </h5>
@@ -54,7 +101,7 @@ const CreateUser = () => {
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-envelope"></i>
                         </span>
-                        <InputText placeholder="Email" />
+                        <InputText placeholder="Email" name="Email" value={user.Email} onChange={handleChange}/>
                     </div>
 
                     <h5>Password </h5>
@@ -62,17 +109,27 @@ const CreateUser = () => {
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-lock"></i>
                         </span>
-                        <InputText placeholder="Password" />
+                        <InputText type="password" placeholder="Password" name="Password" value={user.Password} onChange={handleChange} />
+                    </div>
+
+                    <h5>Phone </h5>
+                    <div className="p-inputgroup ">
+                        <span className="p-inputgroup-addon">
+                            <i className="pi pi-phone"></i>
+                        </span>
+                        <InputText type="tel" placeholder="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
                     </div>
                   
                     <h5>First Page</h5>
                     <>
                     {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
                     <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues} optionLabel="name" placeholder="Select"  />
-                        <Button label="Create User" className="mr-2 mb-2 mt-5"></Button>
-                    </>
+                    <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
+                    </>  
                 </div>
+                </form>  
             </div>
+            
             <div className="col-12 md:col-6">
                 <div className="card">
 

@@ -7,8 +7,8 @@ export class CustomerService {
     }
 
     getCustomersLarge() {
-        return axios.get('assets/demo/data/customers-large.json')
-                .then(res => res.data.data);
+        return axios.get('http://localhost:4001/fetch/alluser')
+                .then(res => res.data.user);
     }
     
 }

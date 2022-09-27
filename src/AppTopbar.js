@@ -5,9 +5,8 @@ import classNames from 'classnames';
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import './components/top.css';
-import { useNavigate } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 export const AppTopbar = (props) => {
 
@@ -20,12 +19,12 @@ export const AppTopbar = (props) => {
              
 
     let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/dashboard'}},
-                 {label: 'Logout', icon: 'pi pi-fw pi-lock', command: () => {window.location.href='#/login'}},
+                //  {label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: () => {window.location.href='#/login'}},
 
-                 {label: 'Login', icon: 'pi pi-fw pi-lock-open', command: () => {window.location.href='#/login'}}];
+                 {label: 'Login', icon: 'pi pi-fw pi-sign-in', command: () => {window.location.href='#/login'}}];
 
     let loginitems= [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},
-                     {label: 'Logout', icon: 'pi pi-fw pi-lock', command: (e) => {logout(e)}}] 
+                     {label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: (e) => {logout(e)}}] 
     
      const logout =(e)=>{ 
 

@@ -38,9 +38,8 @@ const ConfirmPassword = () => {
         var password2=pswrd.confirmpassword;
         
         if(password1 === password2){
-
-        
-            const res=axios.post(`http://localhost:4000/changepassword/${params._id}/${params.token}`,data);
+ 
+            const res=axios.post(`http://localhost:4001/changepassword/${params._id}/${params.token}`,data);
             console.log(res);
             console.log("match");
             

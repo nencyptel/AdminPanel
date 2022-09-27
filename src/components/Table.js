@@ -2,8 +2,6 @@ import React ,{useState,useEffect} from 'react'
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Calendar } from 'primereact/calendar';
-import { classNames } from 'primereact/utils';
-import { TriStateCheckbox } from 'primereact/tristatecheckbox';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { CustomerService } from '../service/CustomerService';
 import { Button } from 'primereact/button';
@@ -30,25 +28,30 @@ const Table = () => {
         });
     }
 
-
-    const verifiedBodyTemplate = (rowData) => {
-        return <i className={classNames('pi', { 'text-green-500 pi-check-circle': rowData.verified, 'text-pink-500 pi-times-circle': !rowData.verified })}></i>;
-    }
-
-    const verifiedFilterTemplate = (options) => {
-        return <TriStateCheckbox value={options.value} onChange={(e) => options.filterCallback(e.value)} />
-    }
-
     const customerService = new CustomerService();
 
     useEffect(() => {
-
-        customerService.getCustomersLarge().then(data => { setCustomers1(getCustomers(data)); setLoading1(false) });
-
+        customerService.getCustomersLarge().then(data => { 
+            setCustomers1(getCustomers1(data)); setLoading1(false) 
+        })
         initFilters1();
     },[]);
 
-    const getCustomers = (data) => {
+    
+    const getCustomers = () => {
+        customerService.getCustomersLarge().then(data => { 
+            setCustomers1(getCustomers1(data.sort((a, b) =>
+            a.Username.toLowerCase() < b.Username.toLowerCase() ? -1 : 1)))});
+            setLoading1(false);
+    }
+    const getCustomers2 = () => {
+        customerService.getCustomersLarge().then(data => { 
+            setCustomers1(getCustomers1(data.sort((a, b) =>
+            a.Username.toLowerCase() > b.Username.toLowerCase() ? -1 : 1)))});
+            setLoading1(false);
+    }
+
+    const getCustomers1 = (data) => {
         return [...data || []].map(d => {
             d.date = new Date(d.date);
             return d;
@@ -69,28 +72,49 @@ const Table = () => {
         });
     }
 
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <div className="actions">
+                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2"  />
+            </div>
+        );
+    }
+
   return (
     <div className="grid table-demo">
         <div className="col-12">
+        <h2>User List</h2>
             <div className="card">
                 <a href="#/createuser"><Button icon="pi pi-plus" label="Create User" className="mr-2 mb-2 btn"/></a>
-                <h5>User List</h5>
-                <DataTable value={customers1} paginator className="p-datatable-gridlines" showGridlines rows={10}
-                    dataKey="id" filters={filters1} filterDisplay="menu" loading={loading1} responsiveLayout="scroll"
+                <div style={{display:"flex",marginBottom:"15px"}}>
+                    <Button className="mr-3 ml-3 " icon="pi pi-sort-amount-down" onClick={(e)=>getCustomers("Username")}/>
+                    <Button icon="pi pi-sort-amount-up" onClick={(e)=>getCustomers2("Username")}/>
+                </div>
+
+                <DataTable value={customers1} paginator className="p-datatable-gridlines " showGridlines rows={5}
+                    dataKey="id" loading={loading1} responsiveLayout="scroll"
                     emptyMessage="No customers found.">
 
-                    <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column icon="pi pi-plus" allowSorting={true} field="Username"  header="User Name" style={{ minWidth: '12rem' }} />
+    
+                    <Column field="Firstname"  header="First Name"  style={{ minWidth: '12rem' }} />
 
-                    <Column field="Username" header="Username" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Lastname" header="Last Name" style={{ minWidth: '12rem' }} />
 
-                    <Column field="Firstname" header="Firstname" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Email" header="Email"  style={{ minWidth: '12rem' }} />
 
-                    <Column field="Lastname" header="Lastame" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Phone" header="Phone"  style={{ minWidth: '12rem' }} />
 
                     <Column header="Date" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate}
                         filter filterElement={dateFilterTemplate} />
 
-                    <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: '8rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedFilterTemplate} />
+                    <Column field="About" header="About" style={{ minWidth: '12rem' }} />
+
+                    <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: '8rem' }}/>
+
+                    <Column  header="Edit" body={actionBodyTemplate}></Column> 
+    
                 </DataTable>
             </div>
         </div>

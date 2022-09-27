@@ -7,7 +7,7 @@ export const LoginData = createAsyncThunk(
       try {
      
         const res = await axios.post(
-          'http://192.168.250.1:4000/get/user/login',
+          'http://localhost:4001/get/user/login',
         data,
    
         )
