@@ -1,4 +1,5 @@
 import axios from 'axios'
+import HttpService from '../components/utils/http.service';
 
 export class CustomerService {
     getCustomersMedium() {
@@ -8,7 +9,7 @@ export class CustomerService {
 
     getCustomersLarge() {
 
-        return axios.get('http://localhost:4000/fetch/alluser')
+        return axios.get(`${HttpService.cutomerService}`)
                 .then(res => res.data);
 
     }

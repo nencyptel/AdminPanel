@@ -3,6 +3,7 @@ import "../components/style/login.css";
 import { Toast } from "primereact/toast";
 import { toast } from "react-toastify";
 import axios from 'axios';
+import HttpService from "./utils/http.service";
 
 const Register = () => {
 
@@ -35,7 +36,7 @@ const Register = () => {
 
         setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
 
-        const response=await axios.post("http://localhost:4000/create/user", data);
+        const response=await axios.post(`${HttpService.Register}`, data);
         console.log(response);
     };
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router";
 import { Toast } from "primereact/toast";
 import { useHistory } from "react-router";
+import HttpService from "./utils/http.service";
 
 const ConfirmPassword = () => {
     const history=useHistory();
@@ -33,7 +34,7 @@ const ConfirmPassword = () => {
 
         if (password1 === password2) {
             await axios
-                .post(`http://localhost:4000/changepassword/${params._id}/${params.token}`, data)
+                .post(`${HttpService.confirmPassword}/${params._id}/${params.token}`, data)
                 .then((res) => {
                     if (res) {
                         toast.current.show({ severity: "success", detail: `${res.data.msg}`, life: 3000 });
