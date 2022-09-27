@@ -9,14 +9,17 @@ import { HashRouter } from 'react-router-dom'
 import ScrollToTop from './ScrollToTop';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Toast } from "primereact/toast";
+
+
 
 ReactDOM.render(
+    
     <HashRouter>
         <ScrollToTop>
         <Provider store={store}>
         <ToastContainer/>
-            <App></App>
-           
+            <App></App> 
             </Provider>
         </ScrollToTop>
     </HashRouter>,

@@ -44,11 +44,21 @@ const Table = () => {
     useEffect(() => {
 
         customerService.getCustomersLarge().then(data => { setCustomers1(getCustomers(data)); setLoading1(false) });
-
         initFilters1();
-    },[]);
 
+    },[]);
+    function compare( a, b ) {
+        if ( a.Username < b.Username ){
+          return -1;
+        }
+        if ( a.Username > b.Username ){
+          return 1;
+        }
+        return 0;
+      }
+      
     const getCustomers = (data) => {
+        console.log(data.sort(compare));
         return [...data || []].map(d => {
             d.date = new Date(d.date);
             return d;
@@ -76,18 +86,24 @@ const Table = () => {
                 <a href="#/createuser"><Button icon="pi pi-plus" label="Create User" className="mr-2 mb-2 btn"/></a>
                 <h5>User List</h5>
                 <DataTable value={customers1} paginator className="p-datatable-gridlines" showGridlines rows={10}
-                    dataKey="id" filters={filters1} filterDisplay="menu" loading={loading1} responsiveLayout="scroll"
+                    dataKey="id"  filters={filters1} filterDisplay="menu" loading={loading1} responsiveLayout="scroll"
                     emptyMessage="No customers found.">
 
-                    <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Username" sortable="custom"
+                       sorting="handleSort($event)" icon="pi-arrow-up" header="Name " filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Email" sortable="custom"
+                       sorting="handleSort($event)" header="Email" filter filterPlaceholder="Search by Email" style={{ minWidth: '12rem' }} />
+                    <Column field="Phone" sortable="custom"
+                       sorting="handleSort($event)" header="Phone" filter filterPlaceholder="Search by Company" style={{ minWidth: '12rem' }} />
 
-                    <Column field="Username" header="Username" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column field="Firstname" sortable="custom"
+                       sorting="handleSort($event)" header="Firstname" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
 
-                    <Column field="Firstname" header="Firstname" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                    <Column sortable="custom"
+                       sorting="handleSort($event)" field="Lastname" header="Lastname" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
 
-                    <Column field="Lastname" header="Lastame" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-
-                    <Column header="Date" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate}
+                    <Column sortable="custom"
+                       sorting="handleSort($event)" header="Date" filterField="createdAt" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate}
                         filter filterElement={dateFilterTemplate} />
 
                     <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: '8rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedFilterTemplate} />

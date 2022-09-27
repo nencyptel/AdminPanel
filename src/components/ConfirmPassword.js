@@ -1,69 +1,79 @@
-
-import React , {useState} from 'react'
-import axios from 'axios';
-import { useParams } from 'react-router';
+import React, { useState, useRef } from "react";
+import axios from "axios";
+import { useParams } from "react-router";
+import { Toast } from "primereact/toast";
+import { useHistory } from "react-router";
 
 const ConfirmPassword = () => {
-
+    const history=useHistory();
     const params = useParams();
-    console.log(params._id);
-    console.log(params.token);
+    const toast = useRef(null);
+    const [errormsg, setErrormsg] = useState({
+        status: "",
+        msg: "",
+    });
 
-
-    const[pswrd,setPswrd] = useState({
-        Password : "",
+    const [pswrd, setPswrd] = useState({
+        Password: "",
         confirmpassword: "",
-    })
+    });
 
-    const paswrd=(e)=>{  
-        setPswrd({...pswrd,[e.target.name]:e.target.value});   
+    const paswrd = (e) => {
+        setPswrd({ ...pswrd, [e.target.name]: e.target.value });
+    };
 
-        console.log(e.target.value)
-
-    }
-    
-    const handlesubmit =(e)=>{
-
-
+    const handlesubmit = async (e) => {
         e.preventDefault();
+        const data = {
+            Password: pswrd.Password,
+        };
 
-        console.log("hello");
-    
-        const data={
-            Password : pswrd.Password,
+        var password1 = pswrd.Password;
+        var password2 = pswrd.confirmpassword;
+
+        if (password1 === password2) {
+            await axios
+                .post(`http://localhost:4000/changepassword/${params._id}/${params.token}`, data)
+                .then((res) => {
+                    if (res) {
+                        toast.current.show({ severity: "success", detail: `${res.data.msg}`, life: 3000 });
+                        setPswrd({
+                            Password: "",
+                            confirmpassword: "",
+                        });
+                        setErrormsg({ status: false, msg: "" });
+                        history.push('/login')
+                    }
+                })
+                .catch((error) => {
+                    toast.current.show({ severity: "error", detail: `${error.response.data.Errmsg}`, life: 3000 });
+                    setPswrd({
+                        Password: "",
+                        confirmpassword: "",
+                    });
+                    setErrormsg({ status: false, msg: "" });
+                });
+        } else {
+            setErrormsg({ status: true, msg: "Password does not matching !" });
         }
+    };
 
-
-        var password1=pswrd.Password;
-        var password2=pswrd.confirmpassword;
-        
-        if(password1 === password2){
-
-        
-            const res=axios.post(`http://localhost:4000/changepassword/${params._id}/${params.token}`,data);
-            console.log(res);
-            console.log("match");
-            
-        }else{
-            console.log("Unmatch");
-        }
-    }
-       
-  return (
-    <div className="App">
+    return (
+        <div className="App">
+            <Toast ref={toast} />
             <div className="container">
                 <div className="row">
                     <form method="post" onSubmit={handlesubmit}>
                         <div className="frm">
-                            
-                            <div className="mb-3" style={{fontSize:"15px"}}>
+                            <div className="mb-3" style={{ fontSize: "15px" }}>
+                                {errormsg.status ? <p className="errormsg"> {errormsg.msg}</p> : null}
                                 <label className="mb-4">Password :</label>
-                                <input name="Password"  type="text" value={pswrd.Password} onChange={paswrd} className="form-control" placeholder="Enter Password" />
+                                <input name="Password" type="text" value={pswrd.Password} onChange={paswrd} className="form-control" placeholder="Enter Password" />
                             </div>
 
-                            <div className="mb-3" style={{fontSize:"15px"}}>
+                            <div className="mb-3" style={{ fontSize: "15px" }}>
                                 <label className="mb-4">Confirm Password :</label>
-                                <input name="confirmpassword"  type="text" value={pswrd.confirmpassword} onChange={paswrd} className="form-control" placeholder="Enter Confirm Password" />
+                                <input name="confirmpassword" type="text" value={pswrd.confirmpassword} onChange={paswrd} className="form-control" placeholder="Enter Confirm Password" />
                             </div>
 
                             <div className="d-grid">
@@ -76,7 +86,7 @@ const ConfirmPassword = () => {
                 </div>
             </div>
         </div>
-  )
-}
+    );
+};
 
-export default ConfirmPassword
+export default ConfirmPassword;

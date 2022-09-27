@@ -18,20 +18,23 @@ function  ForgetPassword() {
         Email:email.Email
     }
 
-    const response=await axios.post("http://localhost:4000/forgetpassword" , data);
-    console.log(response.data.msg);
-     
-    toast.current.show({ severity: "success", detail: `${response.data.msg}`, life: 3000 });
-
+      await axios.post("http://localhost:4000/forgetpassword" , data)
+    .then((response)=>{
+        toast.current.show({ severity: "success", detail: `${response.data.msg}`, life: 3000 });
+        setEmail({Email:""})
+    })
+    .catch((error)=>{
+        toast.current.show({ severity: "error", detail: `${error.response.data.Errmsg}`, life: 3000 });
+        console.log("error.response.data.Errmsg");
+        setEmail({Email:""})
+    })
+    
   }
 
 
   return (
     <div className="App">
-
- <Toast ref={toast} />
-
-
+         <Toast ref={toast} />
             <div className="container">
                 <div className="row">
                     <form method="post" onSubmit={handlesubmit}>

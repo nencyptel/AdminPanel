@@ -79,3 +79,12 @@ form{
 {
   border-color: red!important;
 }
+p.errormsg {
+  color: white;
+  background: #d16767;
+  /* border: violet; */
+  /* border: dotted; */
+  font-size: 16px;
+  text-align: center;
+  padding: 15px;
+}

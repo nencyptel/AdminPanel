@@ -13,6 +13,8 @@ const CreateUser = () => {
     });
     const [dropdownValue, setDropdownValue] = useState(null);
 
+    const [check, setCheck] = useState([]);
+    
     const drpdwn = (e,index)=> {
 
         console.log(e.target.name)

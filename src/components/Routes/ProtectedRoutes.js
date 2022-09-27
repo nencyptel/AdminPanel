@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { Route, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import HttpService from "../utils/http.service";
 
 function PrivateRoute({ component: Component, ...rest }) {
     const [item, setItem] = useState(true);
@@ -12,8 +13,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 
     const userid = userInfo?.data?.token?._userId;
     console.log(userid);
-    const userToken=useSelector((state) => state.user.userToken);
-
+    const userToken=localStorage.getItem("userToken");
     const isAuthenticated = () => {   
         try {
             if (userToken) {
@@ -22,7 +22,7 @@ function PrivateRoute({ component: Component, ...rest }) {
                       Authorization: `Bearer ${userToken}`,
                     },
                   }
-               axios.get(`http://localhost:4000/auth/verify/user/${userid}`,config)
+               axios.get(`${HttpService.verifyuser}${userid}`,config)
          
               .then((res)=>{
                 if(res){
@@ -51,7 +51,8 @@ function PrivateRoute({ component: Component, ...rest }) {
 
     useEffect(() => {
     if(userToken){
-        isAuthenticated();      
+        // isAuthenticated();   
+        setItem(true)   
     }else{
         setItem(false)
     }
