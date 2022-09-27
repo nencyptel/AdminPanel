@@ -1,6 +1,7 @@
 import React, { useState ,useRef } from 'react'
 import axios from 'axios';
 import { Toast } from "primereact/toast";
+import HttpService from './utils/http.service';
 
 function  ForgetPassword() {
     const toast = useRef(null);
@@ -18,7 +19,7 @@ function  ForgetPassword() {
         Email:email.Email
     }
 
-      await axios.post("http://localhost:4000/forgetpassword" , data)
+      await axios.post(`${HttpService.forgetpassword}` , data)
     .then((response)=>{
         toast.current.show({ severity: "success", detail: `${response.data.msg}`, life: 3000 });
         setEmail({Email:""})
