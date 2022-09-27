@@ -22,12 +22,9 @@ function PrivateRoute({ component: Component, ...rest }) {
                       Authorization: `Bearer ${userToken}`,
                     },
                   }
-<<<<<<< HEAD
-               axios.get(`http://localhost:4001/auth/verify/user/${userid}`,config)
-=======
+
                axios.get(`${HttpService.verifyuser}${userid}`,config)
->>>>>>> 9eebda40b6898a7124153be643234498a37cb30d
-         
+
               .then((res)=>{
                 if(res){
                     if(res.data.status === 300){

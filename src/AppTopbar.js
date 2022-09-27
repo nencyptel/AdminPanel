@@ -2,13 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 // import 'react-dropdown/style.css';
-<<<<<<< HEAD
-import { Menu } from 'primereact/menu';
-import { Button } from 'primereact/button';
-import './components/top.css';
-import { useHistory } from "react-router-dom";
-import { useSelector } from 'react-redux'
-=======
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
 import "./components/top.css";
@@ -16,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useHistory ,Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {logout} from '../src/components/Redux/Reducer/LoginSlice';
->>>>>>> 9eebda40b6898a7124153be643234498a37cb30d
 
 export const AppTopbar = (props) => {
     //let navigate = useNavigate();
@@ -26,22 +18,6 @@ export const AppTopbar = (props) => {
     // const userToken = useSelector((state) => state?.user?.userToken);
     const [token, setToken] = useState(false);
 
-<<<<<<< HEAD
-    const userToken=useSelector((state) => state?.user?.userToken);
-    const [token , setToken]=useState();
-       
-             
-
-    let items = [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/dashboard'}},
-                //  {label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: () => {window.location.href='#/login'}},
-
-                 {label: 'Login', icon: 'pi pi-fw pi-sign-in', command: () => {window.location.href='#/login'}}];
-
-    let loginitems= [{label: 'My Profile', icon: 'pi pi-fw pi-user',command: () => {window.location.href='#/'}},
-                     {label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: (e) => {logout(e)}}] 
-    
-     const logout =(e)=>{ 
-=======
     let items = [
         {
             label: "My Profile",
@@ -75,7 +51,6 @@ export const AppTopbar = (props) => {
             },
         },
     ];
->>>>>>> 9eebda40b6898a7124153be643234498a37cb30d
 
     const logout11 = (e) => {
         // if (history) {

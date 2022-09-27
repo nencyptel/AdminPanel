@@ -2,29 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import HttpService from "../../utils/http.service";
 
-<<<<<<< HEAD
-export const LoginData = createAsyncThunk(
-    'user/login',
-    async (data, { rejectWithValue }) => {
-      try {
-     
-        const res = await axios.post(
-          'http://localhost:4001/get/user/login',
-        data,
-   
-        )
-        const token=res.data?.token?.token
 
-        // store user's token in local storage
-        if(localStorage.setItem('userToken', token)){
-=======
 export const LoginData = createAsyncThunk("user/login", async (data, { rejectWithValue }) => {
     try {
        const res= await axios.post(`${HttpService.login}`, data)
         
           const token = res.data?.token?.token;
           localStorage.setItem("userToken", token);
->>>>>>> 9eebda40b6898a7124153be643234498a37cb30d
+
           return res;
       
     } catch (error) {
