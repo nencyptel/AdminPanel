@@ -96,7 +96,8 @@ const Table = () => {
                     dataKey="id" loading={loading1} responsiveLayout="scroll"
                     emptyMessage="No customers found.">
 
-                    <Column icon="pi pi-plus" allowSorting={true} field="Username"  header="User Name" style={{ minWidth: '12rem' }} />
+                    <Column icon="pi pi-plus" sortable="custom"
+                       sorting="handleSort($event)" allowSorting={true} field="Username"  header="User Name" style={{ minWidth: '12rem' }} />
     
                     <Column field="Firstname"  header="First Name"  style={{ minWidth: '12rem' }} />
 

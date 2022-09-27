@@ -15,6 +15,8 @@ const CreateUser = () => {
     });
     const [dropdownValue, setDropdownValue] = useState(null);
 
+    const [check, setCheck] = useState([]);
+    
     const drpdwn = (e,index)=> {
 
         console.log(e.target.name)
@@ -74,6 +76,8 @@ const CreateUser = () => {
             setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
         }
     };
+       
+
 
     return (
         <div className="grid p-fluid">   
