@@ -40,9 +40,11 @@ const Crud = () => {
 
     useEffect(() => {
         const productService = new ProductService();
-        productService.getProducts().then(data => setProducts(data));
+        productService.getProducts().then(data => {setProducts(data);
+            console.log(data)});  
     }, []);
-
+     
+    
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     }
@@ -74,7 +76,6 @@ const Crud = () => {
             let _product = { ...product };
             if (product.id) {
                 const index = findIndexById(product.id);
-
                 _products[index] = _product;
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
             }
@@ -155,8 +156,9 @@ const Crud = () => {
     const onInputChange = (e, name) => {
         const val = (e.target && e.target.value) || '';
         let _product = { ...product };
-        _product[`${name}`] = val;
 
+        console.log(product +"product");
+        _product[`${name}`] = val;
         setProduct(_product);
     }
 
@@ -295,7 +297,6 @@ const Crud = () => {
                 <div className="card">
                     <Toast ref={toast} />
                     <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-
                     <DataTable ref={dt} value={products} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
                         dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} className="datatable-responsive"
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -357,8 +358,6 @@ const Crud = () => {
                             </div>
                         </div>
                     </Dialog>
-
-                    c
 
                     <Dialog visible={deleteProductsDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
                         <div className="flex align-items-center justify-content-center">

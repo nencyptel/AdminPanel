@@ -6,7 +6,8 @@ const HttpService = {
     forgetpassword: baseURL+ 'forgetpassword',
     confirmPassword: baseURL + 'changepassword',
     Register :baseURL + 'create/user',
-    cutomerService:baseURL + 'fetch/alluser'
+    cutomerService:baseURL + 'fetch/alluser',
+    deleteUser : baseURL + 'delete/user'
 };
 
 export default HttpService;

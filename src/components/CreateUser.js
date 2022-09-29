@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef } from "react";
 import { InputText } from "primereact/inputtext";
 import { InputSwitch } from "primereact/inputswitch";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { Link } from "react-router-dom";
+import HttpService from "./utils/http.service";
 import axios from 'axios';
+import { Toast } from "primereact/toast";
 
 const CreateUser = () => {
     const [switchValue, setSwitchValue] = useState({
@@ -13,32 +14,32 @@ const CreateUser = () => {
         Dashboard2 :false,
         Dashboard3 :false,
     });
+
+    const toast = useRef(null);
     const [dropdownValue, setDropdownValue] = useState(null);
 
-    const [check, setCheck] = useState([]);
-    
     const drpdwn = (e,index)=> {
 
-        console.log(e.target.name)
+        
         const id = e.target.name
         setSwitchValue({...switchValue,[id]:!switchValue[id]})
     }
+    console.log(dropdownValue, "dropdown");
 
     const dropdown = (e)=>{
-        console.log(e.target.value.name);
-
-        if(e.target.value.name){
-            const id = e.target.value.name
+        console.log(e.target.value); 
+        if(e.target.value){
+            const id = e.target.value
             setSwitchValue({[id]:switchValue[id]=true})
-
-        }
-        
+            setDropdownValue(e.value);
+        }    
     }
-    const dropdownValues = [
-        { name: 'Dashboard', code: 'NY' },
-        { name: 'Dashboard 1', code: 'RM' },
-        { name: 'Dashboard 2', code: 'LDN' },
-        { name: 'Dashboard 3', code: 'IST' },
+
+    const dropdownValues = [ 'Dashboard' ,'Dashboard 1','Dashboard 2', 'Dashboard 3' 
+        // { name: 'Dashboard' },
+        // { name: 'Dashboard 1' },
+        // { name: 'Dashboard 2'},
+        // { name: 'Dashboard 3' },
     ]
 
     const [user, setUser] = useState({
@@ -49,6 +50,7 @@ const CreateUser = () => {
         About: "",
         Firstname: "",
         Lastname: "",
+        firstpage:""
     });
 
     const handleChange = (e) => {
@@ -58,7 +60,7 @@ const CreateUser = () => {
     };
 
     const handlesubmit = async (e) => {
-        console.log("rhfdj")
+  
         e.preventDefault();
 
         const data = {
@@ -69,18 +71,19 @@ const CreateUser = () => {
             About: user.About,
             Firstname: user.Firstname,
             Lastname: user.Lastname,
+            firstpage:dropdownValue
         };
-        const response=await axios.post("http://localhost:4001/create/user", data);
-        console.log(response);
-        if(response) {
-            setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
+        const response=await axios.post(`${HttpService.Register}`, data);
+        if(response) { 
+            setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :"",firstpage:""})
+            toast.current.show({ severity: "success", summary: "Successful", detail: "User created !", life: 3000 });
         }
+        
     };
        
-
-
     return (
-        <div className="grid p-fluid">   
+        <div className="grid p-fluid"> 
+            <Toast ref={toast} />  
             <div className="col-12 md:col-6">
             <form method="post" onSubmit={handlesubmit}>
                 <div className="card">        
@@ -92,12 +95,19 @@ const CreateUser = () => {
                         <InputText placeholder="Username" name="Username" value={user.Username} onChange={handleChange}/>
                     </div>
 
-                    <h5>Name </h5>
+                    <h5>Firstname </h5>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-id-card"></i>
                         </span>
-                        <InputText placeholder="Name" />
+                        <InputText placeholder="Firstname" name="Firstname" value={user.Firstname} onChange={handleChange}/>
+                    </div>
+                    <h5>Lastname </h5>
+                    <div className="p-inputgroup">
+                        <span className="p-inputgroup-addon">
+                            <i className="pi pi-id-card"></i>
+                        </span>
+                        <InputText placeholder="Lastname" name="Lastname" value={user.Lastname} onChange={handleChange}/>
                     </div>
 
                     <h5>Email </h5>
@@ -127,7 +137,7 @@ const CreateUser = () => {
                     <h5>First Page</h5>
                     <>
                     {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
-                    <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues} optionLabel="name" placeholder="Select"  />
+                    <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues}  placeholder="Select"  />
                     <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
                     </>  
                 </div>
@@ -140,23 +150,11 @@ const CreateUser = () => {
                     {dropdownValues.map((ele, index) => {
                         return (
                             <>
-                                <h5>{ele.name}</h5>
-                                <InputSwitch checked={switchValue[ele.name]} value={ele.name} name={ele.name} onChange={(e) => drpdwn(e,index)} />
+                                <h5>{ele}</h5>
+                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e,index)} />
                             </>
                         );
                     })}
-
-                    {/* <h5>Dashboard</h5>
-                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
-
-                    <h5>Dashboard 1</h5>
-                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
-
-                    <h5>Dashboard 2</h5>
-                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} />
-
-                    <h5>Dashboard 3</h5>
-                    <InputSwitch checked={switchValue} onChange={(e) => setSwitchValue(e.value)} /> */}
 
                 </div>
             </div>
