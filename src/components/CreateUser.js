@@ -6,41 +6,67 @@ import { Dropdown } from "primereact/dropdown";
 import HttpService from "./utils/http.service";
 import axios from 'axios';
 import { Toast } from "primereact/toast";
+import Dashboard from "./Dashboard";
 
 const CreateUser = () => {
     const [switchValue, setSwitchValue] = useState({
-        Dashboard : false,
         Dashboard1 :false,
         Dashboard2 :false,
         Dashboard3 :false,
     });
-
+  
+    const [firstpage, setFirstpage]= useState(""); 
     const toast = useRef(null);
-    const [dropdownValue, setDropdownValue] = useState(null);
+   
+    const [dropdownValue, setDropdownValue] = useState();
+    const [accesible , setAccesible]=useState([firstpage]);
+    
 
     const drpdwn = (e,index)=> {
-
-        
+    
         const id = e.target.name
-        setSwitchValue({...switchValue,[id]:!switchValue[id]})
+        setSwitchValue({...switchValue,[id]:!switchValue[id]});
+       
+       // setAccesible({})
+      
+        setAccesible(((prev) =>
+        switchValue[id]
+          ? prev.filter((cur) => cur !=id)
+          : [...prev, e.target.name]
+         ))
+       
     }
-    console.log(dropdownValue, "dropdown");
 
+    
+   
+    console.log(accesible, "dropdown");   
+    useEffect(() => {
+        
+    },[accesible]);
+    
     const dropdown = (e)=>{
-        console.log(e.target.value); 
+      
         if(e.target.value){
             const id = e.target.value
-            setSwitchValue({[id]:switchValue[id]=true})
+            const name1= e.target.name
+            setSwitchValue({[id]:!switchValue[id]});
+           
             setDropdownValue(e.value);
+            
+            setFirstpage(e.target.value);
+            
+         console.log( switchValue[e.target.value], "index");
+
+          setAccesible(((prev) =>
+            switchValue[e.target.value]
+            ? prev.filter((cur) => cur !=id)
+            : [firstpage]
+            ))
+        
         }    
     }
 
-    const dropdownValues = [ 'Dashboard' ,'Dashboard 1','Dashboard 2', 'Dashboard 3' 
-        // { name: 'Dashboard' },
-        // { name: 'Dashboard 1' },
-        // { name: 'Dashboard 2'},
-        // { name: 'Dashboard 3' },
-    ]
+    const dropdownValues = [ 'Dashboard' ,'Dashboard 1','Dashboard 2', 'Dashboard 3']
 
     const [user, setUser] = useState({
         Email: "",
@@ -146,7 +172,6 @@ const CreateUser = () => {
             
             <div className="col-12 md:col-6">
                 <div className="card">
-
                     {dropdownValues.map((ele, index) => {
                         return (
                             <>
@@ -155,7 +180,6 @@ const CreateUser = () => {
                             </>
                         );
                     })}
-
                 </div>
             </div>
         </div>

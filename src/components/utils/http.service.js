@@ -7,7 +7,8 @@ const HttpService = {
     confirmPassword: baseURL + 'changepassword',
     Register :baseURL + 'create/user',
     cutomerService:baseURL + 'fetch/alluser',
-    deleteUser : baseURL + 'delete/user'
+    deleteUser : baseURL + 'delete/user',
+    updateUser: baseURL + 'update/user'
 };
 
 export default HttpService;

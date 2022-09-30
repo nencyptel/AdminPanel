@@ -13,6 +13,8 @@ import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
 import axios from "axios";
 
+
+
 const Table = () => {
     const [customers1, setCustomers1] = useState(null);
     const [filters1, setFilters1] = useState(null);
@@ -50,14 +52,14 @@ const Table = () => {
             About: editData.About,
             Lastname: editData.Lastname,
         }
-        const updateuser= await axios.post(`http://localhost:4000/update/user/${edituserid}` , data);
+        const updateuser= await axios.post(`${HttpService.updateUser}/${edituserid}` , data);
+        
         if(updateuser){
             setProductDialog(false);
             toast.current.show({ severity: "success", summary: "Successful", detail: "User Updated", life: 3000 });
         }
-
     }
-
+    
     const confirmDeleteSelected = (user) => {
         setDeleteUser(user);
         console.log(user, "deleted");
@@ -107,6 +109,7 @@ const Table = () => {
 
         initFilters1();
     }, [customers1]);
+
     const getCustomers = () => {
         customerService.getCustomersLarge().then((data) => {
             setCustomers1(getCustomers1(data.sort((a, b) => (a.Username.toLowerCase() < b.Username.toLowerCase() ? -1 : 1))));
@@ -199,8 +202,11 @@ const Table = () => {
                         <Column field="About" header="About" style={{ minWidth: "12rem" }} />
 
                         <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: "8rem" }} />
+                      
                         <Column body={actionBodyTemplate}></Column>
+                        
                     </DataTable>
+
                     <Dialog visible={productDialog} header="Edit Details" style={{ width: "450px" }} modal className="p-fluid" onHide={hideDialog} footer={productDialogFooter}>
                         <div className="field">
                             <label className="mt-3" htmlFor="Username">

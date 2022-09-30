@@ -182,17 +182,17 @@ const App = () => {
                 {
                     label: "Dashboard1",
                     icon: "pi pi-fw pi-home",
-                    to: "/dashboard1",
+                    to: "/dashboard-1",
                 },
                 {
                     label: "Dashboard2",
                     icon: "pi pi-fw pi-home",
-                    to: "/dashboard2",
+                    to: "/dashboard-2",
                 },
                 {
                     label: "Dashboard3",
                     icon: "pi pi-fw pi-home",
-                    to: "/dashboard3",
+                    to: "/dashboard-3",
                 },
             ],
             
@@ -357,9 +357,9 @@ const App = () => {
                     </PrivateRoute>
 
                     <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    <PrivateRoute path="/dashboard1" component={Dashboard1} />
-                    <PrivateRoute path="/dashboard2" component={Dashboard2} />
-                    <PrivateRoute path="/dashboard3" component={Dashboard3} />
+                    <PrivateRoute path="/dashboard-1" component={Dashboard1} />
+                    <PrivateRoute path="/dashboard-2" component={Dashboard2} />
+                    <PrivateRoute path="/dashboard-3" component={Dashboard3} />
                     <PrivateRoute path="/input" component={InputDemo} />
                     <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
 
