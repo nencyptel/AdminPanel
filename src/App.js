@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Route, useLocation } from "react-router-dom";
+import { Route, useHistory, useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-
+import { Redirect } from "react-router-dom";
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 
+import NotFoundPage from "./components/NotFoundPage";
 import ForgetPassword from "./components/ForgetPassword";
 import Dashboard from "./components/Dashboard";
 import ButtonDemo from "./components/ButtonDemo";
@@ -51,10 +52,10 @@ import Dashboard2 from "./components/Dashboard2";
 import Dashboard3 from "./components/Dashboard3";
 import CreateUser from "./components/CreateUser";
 import Table from "./components/Table";
-
+import axios from "axios";
+import HttpService from "./components/utils/http.service";
 
 const App = () => {
-
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -63,23 +64,21 @@ const App = () => {
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+    const [page, setPage] = useState();
 
-    const [login, setLogin] = useState(true);
+    const [login, setLogin] = useState(false);
 
     const copyTooltipRef = useRef();
     const location = useLocation();
+    const history =useHistory();
 
     PrimeReact.ripple = true;
 
     let menuClick = false;
     let mobileTopbarMenuClick = false;
+    const token = localStorage.getItem("userToken");
 
     useEffect(() => {
-        if( localStorage.getItem('token')){
-            setLogin(true);
-        }
-       
-
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
         } else {
@@ -170,32 +169,22 @@ const App = () => {
         return window.innerWidth >= 992;
     };
 
+    const fetchaccesiblepage = async () => {
+        const user = await axios.get(`${HttpService.accesiblepage}/${token}`);
+        setPage(user);
+    };
+
     const menu = [
         {
             label: "Home",
-            items: [
-                {
-                    label: "Dashboard",
+
+            items: page?.data?.user?.pagelist.map((ele, index) => {
+                return {
+                    label: `${ele.name}`,
                     icon: "pi pi-fw pi-home",
-                    to: "/",
-                },
-                {
-                    label: "Dashboard1",
-                    icon: "pi pi-fw pi-home",
-                    to: "/dashboard-1",
-                },
-                {
-                    label: "Dashboard2",
-                    icon: "pi pi-fw pi-home",
-                    to: "/dashboard-2",
-                },
-                {
-                    label: "Dashboard3",
-                    icon: "pi pi-fw pi-home",
-                    to: "/dashboard-3",
-                },
-            ],
-            
+                    to: `${ele.url}`,
+                };
+            }),
         },
         {
             label: "UI Components",
@@ -334,76 +323,112 @@ const App = () => {
         "layout-theme-light": layoutColorMode === "light",
     });
 
+    useEffect(() => {
+        if (token != 'undefined') {
+            setLogin(true);
+        }
+        fetchaccesiblepage();
+    }, [page, token]);
+
+  
     return (
         <>
-        
-        {login ?  <div className={wrapperClass} onClick={onWrapperClick}>
+            <Route path="/login" component={Login}></Route>
+            <Route path="/register" component={Register}></Route>
+            <Route path="/forgetpassword" component={ForgetPassword} />
+            <Route path="/confirmpassword/:_id/:token" component={ConfirmPassword} />           
+            <Route path="*" component={NotFoundPage} />
 
-            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+            <div className={wrapperClass} onClick={onWrapperClick}>
+                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+                {token ? (
+                    <>
+                        <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                        <div className="layout-sidebar" onClick={onSidebarClick}>
+                            <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                        </div>{" "}
+                        <div className="layout-main-container">
+                            <div className="layout-main">
+                                <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
+                                <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
+                                <PrivateRoute path="/dashboard-1" component={Dashboard1} />
+                                <PrivateRoute path="/dashboard" component={Dashboard} />
+                                <PrivateRoute path="/dashboard-2" component={Dashboard2} />
+                                <PrivateRoute path="/dashboard-3" component={Dashboard3} />
+                                <PrivateRoute path="/input" component={InputDemo} />
+                                <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
+                                <Route path="/invalidstate" component={InvalidStateDemo} />
+                                <Route path="/button" component={ButtonDemo} />
+                                <Route path="/table" component={TableDemo} />
+                                <Route path="/list" component={ListDemo} />
+                                <Route path="/tree" component={TreeDemo} />
+                                <Route path="/panel" component={PanelDemo} />
+                                <Route path="/overlay" component={OverlayDemo} />
+                                <Route path="/media" component={MediaDemo} />
+                                <Route path="/menu" component={MenuDemo} />
+                                <Route path="/messages" component={MessagesDemo} />
+                                <Route path="/blocks" component={BlocksDemo} />
+                                <Route path="/icons" component={IconsDemo} />
+                                <Route path="/file" component={FileDemo} />
+                                <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
+                                <Route path="/misc" component={MiscDemo} />
+                                <Route path="/timeline" component={TimelineDemo} />
+                                <Route path="/crud" component={Crud} />
+                                <Route path="/empty" component={EmptyPage} />
+                                <Route path="/documentation" component={Documentation} />
+                                <Route path="/createuser" component={CreateUser} />
+                                <Route path="/table1" component={Table} />
+                            </div>
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
-            
+                            <AppFooter layoutColorMode={layoutColorMode} />
+                        </div>
+                    </>
+                ) : (
+                 
+                    <>
+                               <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
+                                <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
+                                <PrivateRoute path="/dashboard-1" component={Dashboard1} />
+                                <PrivateRoute path="/dashboard" component={Dashboard} />
+                                <PrivateRoute path="/dashboard-2" component={Dashboard2} />
+                                <PrivateRoute path="/dashboard-3" component={Dashboard3} />
+                                <PrivateRoute path="/input" component={InputDemo} />
+                                <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
 
-            <div className="layout-sidebar" onClick={onSidebarClick}>
-                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                                <Route path="/invalidstate" component={InvalidStateDemo} />
+                                <Route path="/button" component={ButtonDemo} />
+                                <Route path="/table" component={TableDemo} />
+                                <Route path="/list" component={ListDemo} />
+                                <Route path="/tree" component={TreeDemo} />
+                                <Route path="/panel" component={PanelDemo} />
+                                <Route path="/overlay" component={OverlayDemo} />
+                                <Route path="/media" component={MediaDemo} />
+                                <Route path="/menu" component={MenuDemo} />
+                                <Route path="/messages" component={MessagesDemo} />
+                                <Route path="/blocks" component={BlocksDemo} />
+                                <Route path="/icons" component={IconsDemo} />
+                                <Route path="/file" component={FileDemo} />
+                                <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
+                                <Route path="/misc" component={MiscDemo} />
+                                <Route path="/timeline" component={TimelineDemo} />
+                                <Route path="/crud" component={Crud} />
+                                <Route path="/empty" component={EmptyPage} />
+                                <Route path="/documentation" component={Documentation} />
+
+                                <Route path="/createuser" component={CreateUser} />
+                                <Route path="/table1" component={Table} />
+                    </>
+                )}
+              
+
+                {/* <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+
+                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
+                    <div className="layout-mask p-component-overlay"></div>
+                </CSSTransition> */}
             </div>
-
-            <div className="layout-main-container" >
-                <div className="layout-main">
-                    <Route path="/login" component={Login} ></Route>
-                    <Route path="/register" component={Register} ></Route>
-                    <PrivateRoute path="/formlayout"
-                       component={FormLayoutDemo}>
-                    </PrivateRoute>
-
-                    <Route path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                    <PrivateRoute path="/dashboard-1" component={Dashboard1} />
-                    <PrivateRoute path="/dashboard-2" component={Dashboard2} />
-                    <PrivateRoute path="/dashboard-3" component={Dashboard3} />
-                    <PrivateRoute path="/input" component={InputDemo} />
-                    <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
-
-                    <Route path="/invalidstate" component={InvalidStateDemo} />
-                    <Route path="/button" component={ButtonDemo} />
-                    <Route path="/table" component={TableDemo} />
-                    <Route path="/list" component={ListDemo} />
-                    <Route path="/tree" component={TreeDemo} />
-                    <Route path="/panel" component={PanelDemo} />
-                    <Route path="/overlay" component={OverlayDemo} />
-                    <Route path="/media" component={MediaDemo} />
-                    <Route path="/menu" component={MenuDemo} />
-                    <Route path="/messages" component={MessagesDemo} />
-                    <Route path="/blocks" component={BlocksDemo} />
-                    <Route path="/icons" component={IconsDemo} />
-                    <Route path="/file" component={FileDemo} />
-                    <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                    <Route path="/misc" component={MiscDemo} />
-                    <Route path="/timeline" component={TimelineDemo} />
-                    <Route path="/crud" component={Crud} />
-                    <Route path="/empty" component={EmptyPage} />
-                    <Route path="/documentation" component={Documentation} />
-                    <Route path="/forgetpassword" component={ForgetPassword} />
-                    <Route path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
-                    <Route path="/createuser" component={CreateUser} />
-                    <Route path="/table1" component={Table} />
-                </div>
-
-                <AppFooter layoutColorMode={layoutColorMode} />
-            </div>
-
-            <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
-            <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                <div className="layout-mask p-component-overlay"></div>
-            </CSSTransition>
-        </div> :
-            <>
-                <Route path="/login" component={Login} />     
-            </>
-            
-        }
         
-        </> 
+        </>
     );
 };
 

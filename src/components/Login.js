@@ -7,15 +7,14 @@ import { LoginData } from "./Redux/Reducer/LoginSlice";
 import { useHistory, Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { tokenize } from "prismjs";
+import { Password } from "primereact/password";
 
 const Login = () => {
     const history = useHistory();
     const Error = useSelector((state) => state?.user?.error);
-    console.log(Error?.payload);
+
     const userInfo = useSelector((state) => state?.user?.userInfo);
     const userToken = localStorage.getItem("userToken");
-    const slug = localStorage.getItem("firstpage");
-    const [slugs, setSlugs] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -33,32 +32,44 @@ const Login = () => {
     const handlesubmit = async (e) => {
         e.preventDefault();
 
-        const data = {
-            Email: user.Email,
-            Password: user.Password,
-        };
+        if (user.Email != "" && user.Password !== "") {
+            const data = {
+                Email: user.Email,
+                Password: user.Password,
+            };
 
-        if (dispatch(LoginData(data))) {
-            setUser({
-                Email: "",
-                Password: "",
-            });
+            if (dispatch(LoginData(data))) {
+                setUser({
+                    Email: "",
+                    Password: "",
+                });
+            }
+        } else {
+            toast.current.show({ severity: "error", summary: "", detail: `Please enter Email and Password !`, life: 3000 });
         }
     };
 
     useEffect(() => {
-       
         if (userInfo) {
             console.log(userInfo);
             const slug = userInfo?.data?.token?.firstpage;
             history.push(`/${slug}`);
             toast.current.show({ severity: "success", summary: "Successful", detail: "Login succesfull", life: 3000 });
-        }
-        else if (Error) {
+        } else if (Error) {
             toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: `${Error.payload.msg}`, life: 3000 });
         }
-    }, [userInfo, userToken, slug, Error]);
-
+    }, [userInfo, userToken, Error]);
+    // if(userToken){
+    //     return (
+    //         <div className="App">
+    //         <div className="container">
+    //         <div className="row">
+    //         <h1>already login</h1>
+    //         </div>
+    //         </div>
+    //         </div>
+    //     )
+    // }else {
     return (
         <div className="App">
             <Toast ref={toast} />
@@ -67,7 +78,7 @@ const Login = () => {
                     <form method="post" onSubmit={handlesubmit}>
                         <div className="frm">
                             <h3 className="hh3">Sign In</h3>
-                       
+
                             <div className="mb-3">
                                 <label className="mb-4">Email address</label>
                                 <input name="Email" value={user.Email} onChange={handleChange} type="email" className="form-control" placeholder="Enter email" />
@@ -106,6 +117,7 @@ const Login = () => {
             </div>
         </div>
     );
+    // }
 };
 
 export default Login;

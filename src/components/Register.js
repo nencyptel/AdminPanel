@@ -48,7 +48,7 @@ const Register = () => {
                     <form method="post" onSubmit={handlesubmit}>
                         <div className="frm">
                             <h3 className="hh3">Sign Up</h3>
-                            {/* { login +"nency"} */}
+                        
                             <div className="mb-3">
                                 <label className="mb-4">Username </label>
                                 <input name="Username" value={user.Username} onChange={handleChange} type="text" className="form-control" placeholder="Enter username" />
@@ -96,6 +96,7 @@ const Register = () => {
                                 <p className="forgot-password text-left ">
                                     Already have an account? <a href="#/login">Login</a>
                                 </p>
+                               
                             </div>
                         </div>
                     </form>

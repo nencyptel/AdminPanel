@@ -53,12 +53,9 @@ export const AppTopbar = (props) => {
     ];
 
     const logout11 = (e) => {
-        // if (history) {
-        //     console.log(history);
-        //     localStorage.removeItem("userToken");
-        //     // history.push('/login')
-        // }
+     
          dispatch(logout());
+         history.push('/login');
      
     }   
        

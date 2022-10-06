@@ -11,14 +11,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Toast } from "primereact/toast";
 
-
-
 ReactDOM.render(
     
     <HashRouter>
         <ScrollToTop>
         <Provider store={store}>
-        <ToastContainer/>
             <App></App> 
             </Provider>
         </ScrollToTop>

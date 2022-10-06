@@ -12,7 +12,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     const userInfo  = useSelector((state) => state.user.userInfo);
 
     const userid = userInfo?.data?.token?._userId;
-    console.log(userid);
+  
     const userToken=localStorage.getItem("userToken");
     const isAuthenticated = () => {   
         try {
@@ -60,7 +60,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     console.log(userToken);
   },[userToken]);
 
-  console.log(item)
+  
     return (
         <Route
             {...rest}

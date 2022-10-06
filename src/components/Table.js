@@ -12,8 +12,8 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
 import axios from "axios";
-
-
+import { Dropdown } from "primereact/dropdown";
+import { InputSwitch } from "primereact/inputswitch";
 
 const Table = () => {
     const [customers1, setCustomers1] = useState(null);
@@ -26,10 +26,46 @@ const Table = () => {
     const [deleteUser, setDeleteUser] = useState([]);
     const [editData, setEditdata] = useState({});
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-    const [userlist , setUserlist]=useState([]);
+   
+    const dropdownValues = ["Dashboard", "Dashboard 1", "Dashboard 2", "Dashboard 3"];
+
+    const [switchValue, setSwitchValue] = useState({
+        Dashboard: false,
+        Dashboard1: false,
+        Dashboard2: false,
+        Dashboard3: false,
+    });
+   
+
     const toast = useRef(null);
 
+    const [dropdownValue, setDropdownValue] = useState();
+    const [accesible, setAccesible] = useState([]);
   
+    const drpdwn = (e, index) => {
+        const id = e.target.name;
+        setSwitchValue({ ...switchValue, [id]: !switchValue[id] });
+        if (e.target.name) {
+            setAccesible((prev) => (switchValue[id] ? prev.filter((cur) => cur != id) : [...prev, e.target.name]));
+        }
+    };
+
+    const dropdown = (e) => {
+        if (e.target.value) {
+            console.log(e.target.value);
+            const id = e.target.value;
+
+            setSwitchValue({ [id]: (switchValue[id] = true) });
+
+            setDropdownValue(e.value);
+            setAccesible((prevstate) => [e.value]);
+        }
+        else{
+            console.log("nothing");
+            setDropdownValue('Dashboard 1'); 
+        }
+    };
+
     const hideDialog = () => {
         setSubmitted(false);
         setProductDialog(false);
@@ -37,6 +73,7 @@ const Table = () => {
 
     const editProduct = (user) => {
         //setProduct({ ...product });
+        console.log(user);
         setEditdata(user);
         setEditUserid(user._id);
         setProductDialog(true);
@@ -51,7 +88,13 @@ const Table = () => {
             Firstname:editData.Firstname,
             About: editData.About,
             Lastname: editData.Lastname,
+            firstpage: dropdownValue,
+            // pagelist: {name:[accesible],url:[accesible]},
+            pagelist: accesible.map((ele) => {
+                return { name: ele, url: ele };
+            }),
         }
+        console.log(accesible,"edit");
         const updateuser= await axios.post(`${HttpService.updateUser}/${edituserid}` , data);
         
         if(updateuser){
@@ -102,13 +145,14 @@ const Table = () => {
     const customerService = new CustomerService();
 
     useEffect(() => {
+       
         customerService.getCustomersLarge().then((data) => {
             setCustomers1(getCustomers1(data));
             setLoading1(false);
         });
 
         initFilters1();
-    }, [customers1]);
+    }, [customers1 , accesible]);
 
     const getCustomers = () => {
         customerService.getCustomersLarge().then((data) => {
@@ -200,6 +244,7 @@ const Table = () => {
                         <Column header="Date" dataType="date" style={{ minWidth: "10rem" }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
 
                         <Column field="About" header="About" style={{ minWidth: "12rem" }} />
+                        <Column field="firstpage" header="firstpage" style={{ minWidth: "12rem" }} />
 
                         <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: "8rem" }} />
                       
@@ -243,12 +288,26 @@ const Table = () => {
                         </div>
                         <h5>Date</h5>
                         <Calendar name="createdAt" value={editData.createdAt} showIcon showButtonBar></Calendar>
+                        <h5>First Page</h5>
+                        <>
+                            {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
+                            <Dropdown  value={dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
+                            <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
+                        </>
+                        {dropdownValues.map((ele, index) => {
+                        return (
+                            <>
+                                <h5>{ele}</h5>
+                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
+                            </>
+                        );
+                    })}
                     </Dialog>
 
                     <Dialog visible={deleteProductsDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
                         <div className="flex align-items-center justify-content-center">
                             <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
-                            {<span>Are you sure you want to delete the selected products ?</span>}
+                            {<span>Are you sure you want to delete the selected user ?</span>}
                         </div>
                     </Dialog>
                 </div>
