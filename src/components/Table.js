@@ -14,6 +14,7 @@ import classNames from "classnames";
 import axios from "axios";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
+import string_to_slug from "./Common/strintGenerator";
 
 const Table = () => {
     const [customers1, setCustomers1] = useState(null);
@@ -23,27 +24,64 @@ const Table = () => {
     const [submitted, setSubmitted] = useState(false);
     const [deleteuserid, setDeleteUserid] = useState();
     const [edituserid, setEditUserid] = useState();
-    const [deleteUser, setDeleteUser] = useState([]);
+    const [pagelist, setPagelist] = useState([]);
+    const [firstpage, setFirstpage] = useState();
     const [editData, setEditdata] = useState({});
+    const [list,setList]=useState([]);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-   
+
     const dropdownValues = ["Dashboard", "Dashboard 1", "Dashboard 2", "Dashboard 3"];
 
+    const newarr=[];
+     pagelist.map((ele)=>{  
+        newarr.push(ele.name);       
+     });
+    
+
     const [switchValue, setSwitchValue] = useState({
-        Dashboard: false,
-        Dashboard1: false,
-        Dashboard2: false,
-        Dashboard3: false,
+        "Dashboard": false ,
+        "Dashboard 1": false,
+        "Dashboard 2": false,
+        "Dashboard 3": false,
     });
+     const updated=  dropdownValues.map((item)=>{
+      
+        
+        if(newarr.includes(item)==true){
+            return item    
+     
+        } else{
+            return null
+        }
+       
+    })
+   // setSwitchValue({updated:true})
+    //console.log(updated)
+     
+     
    
+    //console.log(newarr.includes("Dashboard 1"));
 
+    console.log( switchValue,"hsg");
+
+    const [dropdownValue, setDropdownValue] = useState(firstpage);
+
+    dropdownValues.map((item) => {
+     
+        if (string_to_slug(item) == firstpage) { 
+            setFirstpage(item);
+        }
+    });
+      
     const toast = useRef(null);
-
-    const [dropdownValue, setDropdownValue] = useState();
     const [accesible, setAccesible] = useState([]);
-  
+
     const drpdwn = (e, index) => {
         const id = e.target.name;
+        // newarr= [];
+        if(switchValue[id]== true){
+            setSwitchValue({ ...switchValue, [id]: !switchValue[id] });
+        }
         setSwitchValue({ ...switchValue, [id]: !switchValue[id] });
         if (e.target.name) {
             setAccesible((prev) => (switchValue[id] ? prev.filter((cur) => cur != id) : [...prev, e.target.name]));
@@ -56,13 +94,11 @@ const Table = () => {
             const id = e.target.value;
 
             setSwitchValue({ [id]: (switchValue[id] = true) });
-
+            setFirstpage()
             setDropdownValue(e.value);
             setAccesible((prevstate) => [e.value]);
-        }
-        else{
-            console.log("nothing");
-            setDropdownValue('Dashboard 1'); 
+        } else {
+            setDropdownValue("Dashboard 1");
         }
     };
 
@@ -72,20 +108,19 @@ const Table = () => {
     };
 
     const editProduct = (user) => {
-        //setProduct({ ...product });
-        console.log(user);
+        setPagelist(user.pagelist);
+        setFirstpage(user.firstpage);
         setEditdata(user);
         setEditUserid(user._id);
         setProductDialog(true);
     };
-    
-    const SaveUserlist = async()=>{
 
-        const data= {
+    const SaveUserlist = async () => {
+        const data = {
             Username: editData.Username,
             Phone: editData.Phone,
-            Email:editData.Email,
-            Firstname:editData.Firstname,
+            Email: editData.Email,
+            Firstname: editData.Firstname,
             About: editData.About,
             Lastname: editData.Lastname,
             firstpage: dropdownValue,
@@ -93,18 +128,18 @@ const Table = () => {
             pagelist: accesible.map((ele) => {
                 return { name: ele, url: ele };
             }),
-        }
-        console.log(accesible,"edit");
-        const updateuser= await axios.post(`${HttpService.updateUser}/${edituserid}` , data);
-        
-        if(updateuser){
+        };
+        console.log(accesible, "edit");
+        const updateuser = await axios.post(`${HttpService.updateUser}/${edituserid}`, data);
+
+        if (updateuser) {
             setProductDialog(false);
             toast.current.show({ severity: "success", summary: "Successful", detail: "User Updated", life: 3000 });
         }
-    }
-    
+    };
+
     const confirmDeleteSelected = (user) => {
-        setDeleteUser(user);
+     
         console.log(user, "deleted");
         setDeleteUserid(user._id);
         setDeleteProductsDialog(true);
@@ -113,10 +148,8 @@ const Table = () => {
     const confirmDeleteuser = async () => {
         const deleteuser = await axios.post(`${HttpService.deleteUser}/${deleteuserid}`);
         console.log(deleteuser, "delete user success");
-        
+
         if (deleteuser) {
-            // let _users = userlist.filter(val => val._id !== deleteuserid);
-            // setCustomers1(_users);
             hideDeleteProductsDialog();
             toast.current.show({ severity: "success", summary: "Successful", detail: "User Deleted", life: 3000 });
         }
@@ -127,7 +160,7 @@ const Table = () => {
     };
 
     const dateBodyTemplate = (rowData) => {
-        return formatDate(rowData.date);
+        return formatDate(rowData.createdAt);
     };
 
     const dateFilterTemplate = (options) => {
@@ -135,24 +168,20 @@ const Table = () => {
     };
 
     const formatDate = (value) => {
-        return value.toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
+        var date = new Date(value);
+        return date.toISOString().substring(0, 10);
     };
 
     const customerService = new CustomerService();
 
     useEffect(() => {
-       
         customerService.getCustomersLarge().then((data) => {
             setCustomers1(getCustomers1(data));
             setLoading1(false);
         });
 
         initFilters1();
-    }, [customers1 , accesible]);
+    }, [customers1, accesible, firstpage]);
 
     const getCustomers = () => {
         customerService.getCustomersLarge().then((data) => {
@@ -167,8 +196,8 @@ const Table = () => {
         });
         setLoading1(false);
     };
-  
-    const getCustomers1 = (data) => { 
+
+    const getCustomers1 = (data) => {
         return [...(data || [])].map((d) => {
             d.date = new Date(d.date);
             return d;
@@ -204,7 +233,7 @@ const Table = () => {
     const productDialogFooter = (
         <>
             <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={SaveUserlist}/>
+            <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={SaveUserlist} />
         </>
     );
 
@@ -239,17 +268,15 @@ const Table = () => {
                         <Column field="Email" header="Email" style={{ minWidth: "12rem" }} />
 
                         <Column field="Phone" header="Phone" style={{ minWidth: "12rem" }} />
-                        <Column field={"createdAt"} header="Date" style={{ minWidth: "12rem" }} />
 
-                        <Column header="Date" dataType="date" style={{ minWidth: "10rem" }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
+                        <Column header="Date" dataType="date" style={{ minWidth: "10rem" }} body={dateBodyTemplate} filterElement={dateFilterTemplate} />
 
                         <Column field="About" header="About" style={{ minWidth: "12rem" }} />
                         <Column field="firstpage" header="firstpage" style={{ minWidth: "12rem" }} />
 
                         <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: "8rem" }} />
-                      
+
                         <Column body={actionBodyTemplate}></Column>
-                        
                     </DataTable>
 
                     <Dialog visible={productDialog} header="Edit Details" style={{ width: "450px" }} modal className="p-fluid" onHide={hideDialog} footer={productDialogFooter}>
@@ -291,17 +318,17 @@ const Table = () => {
                         <h5>First Page</h5>
                         <>
                             {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
-                            <Dropdown  value={dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
+                            <Dropdown value={ firstpage ? firstpage : dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
                             <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
                         </>
                         {dropdownValues.map((ele, index) => {
-                        return (
-                            <>
-                                <h5>{ele}</h5>
-                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
-                            </>
-                        );
-                    })}
+                            return (
+                                <>
+                                    <h5>{ele}</h5>
+                                    <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
+                                </>
+                            );
+                        })}
                     </Dialog>
 
                     <Dialog visible={deleteProductsDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>

@@ -346,7 +346,7 @@ const App = () => {
                         <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
                         <div className="layout-sidebar" onClick={onSidebarClick}>
                             <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-                        </div>{" "}
+                        </div>
                         <div className="layout-main-container">
                             <div className="layout-main">
                                 <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
