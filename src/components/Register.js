@@ -3,9 +3,13 @@ import "../components/style/login.css";
 import { Toast } from "primereact/toast";
 import { toast } from "react-toastify";
 import axios from 'axios';
+import { Dropdown } from "primereact/dropdown";
 import HttpService from "./utils/http.service";
 
 const Register = () => {
+
+    const dropdownValues = ["Admin", "User"];
+    const [dropdownValue, setDropdownValue] = useState();
 
     const [user, setUser] = useState({
         Email: "",
@@ -77,6 +81,12 @@ const Register = () => {
                                 <label className="mb-4">About </label>
                                 <textarea name="About" value={user.About} onChange={handleChange} type="text" className="form-control" style={{ resize: "none" }} />
                             </div>
+                            <div className="mb-3">
+                                <label className="mb-4">Who are you ?</label>
+                                <Dropdown value={dropdownValue} options={dropdownValues} placeholder="Select Usertype" />
+                            </div>
+
+                           
 
                             <div className="mb-3">
                                 <div className="custom-control custom-checkbox">

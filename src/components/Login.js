@@ -10,9 +10,9 @@ import { tokenize } from "prismjs";
 import { Password } from "primereact/password";
 
 const Login = () => {
+
     const history = useHistory();
     const Error = useSelector((state) => state?.user?.error);
-
     const userInfo = useSelector((state) => state?.user?.userInfo);
     const userToken = localStorage.getItem("userToken");
 
@@ -59,17 +59,7 @@ const Login = () => {
             toast.current.show({ severity: "error", summary: "Login Unsuccessful", detail: `${Error.payload.msg}`, life: 3000 });
         }
     }, [userInfo, userToken, Error]);
-    // if(userToken){
-    //     return (
-    //         <div className="App">
-    //         <div className="container">
-    //         <div className="row">
-    //         <h1>already login</h1>
-    //         </div>
-    //         </div>
-    //         </div>
-    //     )
-    // }else {
+   
     return (
         <div className="App">
             <Toast ref={toast} />

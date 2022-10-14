@@ -27,64 +27,57 @@ const Table = () => {
     const [pagelist, setPagelist] = useState([]);
     const [firstpage, setFirstpage] = useState();
     const [editData, setEditdata] = useState({});
-    const [list,setList]=useState([]);
+    const [list, setList] = useState();
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
 
     const dropdownValues = ["Dashboard", "Dashboard 1", "Dashboard 2", "Dashboard 3"];
 
-    const newarr=[];
-     pagelist.map((ele)=>{  
-        newarr.push(ele.name);       
-     });
+   
+    const newarr = [...pagelist?.map((ele) => ele.name)];
+
+   
+    useEffect(()=>{ 
+   
+       newarr.forEach((item)=>{
+        console.log(item , "foreach");
+        setSwitchValue({ ...switchValue, [item]: switchValue[item]=true });
+        setAccesible([item]);
+      });
+
+
+    },[switchValue , accesible, pagelist])
     
+  //console.log(accesible , "first accesbile  ")
 
     const [switchValue, setSwitchValue] = useState({
-        "Dashboard": false ,
+       
+        "Dashboard": false,
         "Dashboard 1": false,
         "Dashboard 2": false,
         "Dashboard 3": false,
     });
-     const updated=  dropdownValues.map((item)=>{
-      
-        
-        if(newarr.includes(item)==true){
-            return item    
-     
-        } else{
-            return null
-        }
-       
-    })
-   // setSwitchValue({updated:true})
-    //console.log(updated)
-     
-     
-   
-    //console.log(newarr.includes("Dashboard 1"));
 
-    console.log( switchValue,"hsg");
+ 
 
     const [dropdownValue, setDropdownValue] = useState(firstpage);
 
     dropdownValues.map((item) => {
-     
-        if (string_to_slug(item) == firstpage) { 
+        if (string_to_slug(item) === firstpage) {
             setFirstpage(item);
+            
         }
     });
-      
+
     const toast = useRef(null);
     const [accesible, setAccesible] = useState([]);
 
-    const drpdwn = (e, index) => {
+    const drpdwn = (e, ele) => {
+        console.log(e.value, "ele");
         const id = e.target.name;
-        // newarr= [];
-        if(switchValue[id]== true){
-            setSwitchValue({ ...switchValue, [id]: !switchValue[id] });
-        }
+        
         setSwitchValue({ ...switchValue, [id]: !switchValue[id] });
         if (e.target.name) {
-            setAccesible((prev) => (switchValue[id] ? prev.filter((cur) => cur != id) : [...prev, e.target.name]));
+            setAccesible((prev) => (switchValue[id] ? prev.filter((cur) => cur !== id) : [...prev, e.target.name]));
         }
     };
 
@@ -92,9 +85,8 @@ const Table = () => {
         if (e.target.value) {
             console.log(e.target.value);
             const id = e.target.value;
-
-            setSwitchValue({ [id]: (switchValue[id] = true) });
-            setFirstpage()
+            setSwitchValue({ [id]: switchValue[id] =true});
+            setFirstpage();
             setDropdownValue(e.value);
             setAccesible((prevstate) => [e.value]);
         } else {
@@ -116,6 +108,7 @@ const Table = () => {
     };
 
     const SaveUserlist = async () => {
+        
         const data = {
             Username: editData.Username,
             Phone: editData.Phone,
@@ -124,9 +117,8 @@ const Table = () => {
             About: editData.About,
             Lastname: editData.Lastname,
             firstpage: dropdownValue,
-            // pagelist: {name:[accesible],url:[accesible]},
             pagelist: accesible.map((ele) => {
-                return { name: ele, url: ele };
+                return { name: ele, url:string_to_slug(ele) };
             }),
         };
         console.log(accesible, "edit");
@@ -139,7 +131,6 @@ const Table = () => {
     };
 
     const confirmDeleteSelected = (user) => {
-     
         console.log(user, "deleted");
         setDeleteUserid(user._id);
         setDeleteProductsDialog(true);
@@ -261,17 +252,17 @@ const Table = () => {
                     <DataTable value={customers1} paginator className="p-datatable-gridlines " showGridlines rows={5} dataKey="id" loading={loading1} responsiveLayout="scroll" emptyMessage="No customers found.">
                         <Column icon="pi pi-plus" sortable="custom" sorting="handleSort($event)" allowSorting={true} field="Username" header="User Name" style={{ minWidth: "12rem" }} />
 
-                        <Column field="Firstname" header="First Name" style={{ minWidth: "12rem" }} />
+                        <Column field="Firstname" sortable="custom" sorting="handleSort($event)" header="First Name" style={{ minWidth: "12rem" }} />
 
-                        <Column field="Lastname" header="Last Name" style={{ minWidth: "12rem" }} />
+                        <Column field="Lastname" sortable="custom" sorting="handleSort($event)" header="Last Name" style={{ minWidth: "12rem" }} />
 
-                        <Column field="Email" header="Email" style={{ minWidth: "12rem" }} />
+                        <Column field="Email" sortable="custom" sorting="handleSort($event)" header="Email" style={{ minWidth: "12rem" }} />
 
-                        <Column field="Phone" header="Phone" style={{ minWidth: "12rem" }} />
+                        <Column field="Phone" sortable="custom" sorting="handleSort($event)" header="Phone" style={{ minWidth: "12rem" }} />
 
-                        <Column header="Date" dataType="date" style={{ minWidth: "10rem" }} body={dateBodyTemplate} filterElement={dateFilterTemplate} />
+                        <Column header="Date" sortable="custom" sorting="handleSort($event)" dataType="date" style={{ minWidth: "10rem" }} body={dateBodyTemplate} filterElement={dateFilterTemplate} />
 
-                        <Column field="About" header="About" style={{ minWidth: "12rem" }} />
+                        <Column field="About" sortable="custom" sorting="handleSort($event)" header="About" style={{ minWidth: "12rem" }} />
                         <Column field="firstpage" header="firstpage" style={{ minWidth: "12rem" }} />
 
                         <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: "8rem" }} />
@@ -318,14 +309,14 @@ const Table = () => {
                         <h5>First Page</h5>
                         <>
                             {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
-                            <Dropdown value={ firstpage ? firstpage : dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
+                            <Dropdown value={firstpage ? firstpage : dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
                             <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
                         </>
                         {dropdownValues.map((ele, index) => {
                             return (
                                 <>
                                     <h5>{ele}</h5>
-                                    <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
+                                    <InputSwitch checked={ switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, ele)} />
                                 </>
                             );
                         })}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { Route, useHistory, useLocation } from "react-router-dom";
+import { Route, BrowserRouter, Switch, useHistory, useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { Redirect } from "react-router-dom";
 import { AppTopbar } from "./AppTopbar";
 import { AppFooter } from "./AppFooter";
 import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
+import MyProfile from "./components/MyProfile";
 
 import NotFoundPage from "./components/NotFoundPage";
 import ForgetPassword from "./components/ForgetPassword";
@@ -53,6 +54,7 @@ import Dashboard3 from "./components/Dashboard3";
 import CreateUser from "./components/CreateUser";
 import Table from "./components/Table";
 import axios from "axios";
+import EditProfile from "./components/EditProfile";
 import HttpService from "./components/utils/http.service";
 
 const App = () => {
@@ -70,7 +72,7 @@ const App = () => {
 
     const copyTooltipRef = useRef();
     const location = useLocation();
-    const history =useHistory();
+    const history = useHistory();
 
     PrimeReact.ripple = true;
 
@@ -324,21 +326,19 @@ const App = () => {
     });
 
     useEffect(() => {
-        if (token != 'undefined') {
+        if (token != "undefined") {
             setLogin(true);
         }
         fetchaccesiblepage();
     }, [page, token]);
 
-  
     return (
         <>
-            <Route path="/login" component={Login}></Route>
-            <Route path="/register" component={Register}></Route>
-            <Route path="/forgetpassword" component={ForgetPassword} />
-            <Route path="/confirmpassword/:_id/:token" component={ConfirmPassword} />           
-            <Route path="*" component={NotFoundPage} />
-
+            <Route path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/forgetpassword" component={ForgetPassword} />
+            <Route exact path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
+            <Route path="/notfound" component={NotFoundPage} />
             <div className={wrapperClass} onClick={onWrapperClick}>
                 <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
                 {token ? (
@@ -378,48 +378,49 @@ const App = () => {
                                 <Route path="/documentation" component={Documentation} />
                                 <Route path="/createuser" component={CreateUser} />
                                 <Route path="/table1" component={Table} />
+                                <PrivateRoute path="/myprofile" component={MyProfile}></PrivateRoute>
+                                <PrivateRoute path="/editprofile" component={EditProfile}></PrivateRoute>
                             </div>
 
                             <AppFooter layoutColorMode={layoutColorMode} />
                         </div>
                     </>
                 ) : (
-                 
                     <>
-                               <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
-                                <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                                <PrivateRoute path="/dashboard-1" component={Dashboard1} />
-                                <PrivateRoute path="/dashboard" component={Dashboard} />
-                                <PrivateRoute path="/dashboard-2" component={Dashboard2} />
-                                <PrivateRoute path="/dashboard-3" component={Dashboard3} />
-                                <PrivateRoute path="/input" component={InputDemo} />
-                                <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
+                        <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
+                        <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
+                        <PrivateRoute path="/dashboard-1" component={Dashboard1} />
+                        <PrivateRoute path="/dashboard" component={Dashboard} />
+                        <PrivateRoute path="/dashboard-2" component={Dashboard2} />
+                        <PrivateRoute path="/dashboard-3" component={Dashboard3} />
+                        <PrivateRoute path="/input" component={InputDemo} />
+                        <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
+                        <PrivateRoute path="/myprofile" component={MyProfile}></PrivateRoute>
+                        <PrivateRoute path="/editprofile" component={EditProfile}></PrivateRoute>
+                        <Route path="/invalidstate" component={InvalidStateDemo} />
+                        <Route path="/button" component={ButtonDemo} />
+                        <Route path="/table" component={TableDemo} />
+                        <Route path="/list" component={ListDemo} />
+                        <Route path="/tree" component={TreeDemo} />
+                        <Route path="/panel" component={PanelDemo} />
+                        <Route path="/overlay" component={OverlayDemo} />
+                        <Route path="/media" component={MediaDemo} />
+                        <Route path="/menu" component={MenuDemo} />
+                        <Route path="/messages" component={MessagesDemo} />
+                        <Route path="/blocks" component={BlocksDemo} />
+                        <Route path="/icons" component={IconsDemo} />
+                        <Route path="/file" component={FileDemo} />
+                        <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
+                        <Route path="/misc" component={MiscDemo} />
+                        <Route path="/timeline" component={TimelineDemo} />
+                        <Route path="/crud" component={Crud} />
+                        <Route path="/empty" component={EmptyPage} />
+                        <Route path="/documentation" component={Documentation} />
 
-                                <Route path="/invalidstate" component={InvalidStateDemo} />
-                                <Route path="/button" component={ButtonDemo} />
-                                <Route path="/table" component={TableDemo} />
-                                <Route path="/list" component={ListDemo} />
-                                <Route path="/tree" component={TreeDemo} />
-                                <Route path="/panel" component={PanelDemo} />
-                                <Route path="/overlay" component={OverlayDemo} />
-                                <Route path="/media" component={MediaDemo} />
-                                <Route path="/menu" component={MenuDemo} />
-                                <Route path="/messages" component={MessagesDemo} />
-                                <Route path="/blocks" component={BlocksDemo} />
-                                <Route path="/icons" component={IconsDemo} />
-                                <Route path="/file" component={FileDemo} />
-                                <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                                <Route path="/misc" component={MiscDemo} />
-                                <Route path="/timeline" component={TimelineDemo} />
-                                <Route path="/crud" component={Crud} />
-                                <Route path="/empty" component={EmptyPage} />
-                                <Route path="/documentation" component={Documentation} />
-
-                                <Route path="/createuser" component={CreateUser} />
-                                <Route path="/table1" component={Table} />
+                        <Route path="/createuser" component={CreateUser} />
+                        <Route path="/table1" component={Table} />
                     </>
                 )}
-              
 
                 {/* <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
 
@@ -427,7 +428,6 @@ const App = () => {
                     <div className="layout-mask p-component-overlay"></div>
                 </CSSTransition> */}
             </div>
-        
         </>
     );
 };

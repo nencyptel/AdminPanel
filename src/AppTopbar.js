@@ -40,7 +40,7 @@ export const AppTopbar = (props) => {
             label: "My Profile",
             icon: "pi pi-fw pi-user",
             command: () => {
-                window.location.href = "#/";
+                window.location.href = "#/myprofile";
             },
         },
         {

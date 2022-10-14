@@ -1,4 +1,4 @@
-const baseURL = `http://192.168.1.107:4000/`;
+const baseURL = `http://localhost:4000/`;
 
 const HttpService = {
     login: baseURL + 'get/user/login',
@@ -9,7 +9,8 @@ const HttpService = {
     cutomerService:baseURL + 'fetch/alluser',
     deleteUser : baseURL + 'delete/user',
     updateUser: baseURL + 'update/user',
-    accesiblepage : baseURL + 'accessible/page'
+    accesiblepage : baseURL + 'accessible/page',
+    fetchUser: baseURL + 'get/userbyid'
 };
 
 export default HttpService;

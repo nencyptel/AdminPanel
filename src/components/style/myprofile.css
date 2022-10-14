@@ -1,0 +1,14 @@
+.userinfo {
+    display: flex;
+    width: 100%;
+    align-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.title-user{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
