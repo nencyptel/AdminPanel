@@ -1,7 +1,5 @@
-import { Menu } from "primereact/menu";
 import PrimeReact from "primereact/api";
 import { Tooltip } from "primereact/tooltip";
-import { Redirect } from "react-router-dom";
 import "primereact/resources/primereact.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -10,17 +8,21 @@ import "../../assets/demo/flags/flags.css";
 import "../../assets/demo/Demos.scss";
 import "../../assets/layout/layout.scss";
 import "../../App.scss";
-import { useState , useEffect , useRef } from "react";
-
+import { useState, useEffect, useRef } from "react";
 import { AppTopbar } from "../../AppTopbar";
-import { AppFooter } from "../../AppFooter";
 import { AppMenu } from "../../AppMenu";
 import { AppConfig } from "../../AppConfig";
 import classNames from "classnames";
 import { Route, useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
+import { useDispatch, useSelector } from "react-redux";
+import { FetchAccesiblePage } from "../Redux/Reducer/AccesiblepageSlice";
 
-function Menubar() {
+function Menubar(props) {
+
+
+    const dispatch = useDispatch();
+    const userPages = useSelector((state) => state?.accesiblepage?.userInfo);
     const [layoutMode, setLayoutMode] = useState("static");
     const [layoutColorMode, setLayoutColorMode] = useState("light");
     const [inputStyle, setInputStyle] = useState("outlined");
@@ -29,6 +31,7 @@ function Menubar() {
     const [overlayMenuActive, setOverlayMenuActive] = useState(false);
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
     const [mobileTopbarMenuActive, setMobileTopbarMenuActive] = useState(false);
+   
 
     const copyTooltipRef = useRef();
     const location = useLocation();
@@ -37,16 +40,20 @@ function Menubar() {
 
     let menuClick = false;
     let mobileTopbarMenuClick = false;
+    const data = localStorage.getItem("userToken");
+    const pages = userPages?.data?.user?.pagelist;
     useEffect(() => {
-        
+        if(data){
+            dispatch(FetchAccesiblePage(data));   
+        }
+       
+    }, [data ]);
+    useEffect(() => {
         if (mobileMenuActive) {
             addClass(document.body, "body-overflow-hidden");
         } else {
             removeClass(document.body, "body-overflow-hidden");
         }
-        // if(localStorage.getItem('token')){
-        //     setLogin(false);
-        // }
     }, [mobileMenuActive]);
 
     useEffect(() => {
@@ -99,6 +106,7 @@ function Menubar() {
                 setStaticMenuInactive((prevState) => !prevState);
             }
         } else {
+            console.log("wrapper");
             setMobileMenuActive((prevState) => !prevState);
         }
 
@@ -135,13 +143,14 @@ function Menubar() {
     const menu = [
         {
             label: "Home",
-            items: [
-                {
-                    label: "Dashboard",
+
+            items: pages?.map((ele) => {
+                return {
+                    label: `${ele.name}`,
                     icon: "pi pi-fw pi-home",
-                    to: "/",
-                },
-            ],
+                    to: `${ele.url}`,
+                };
+            }),
         },
         {
             label: "UI Components",
@@ -153,6 +162,7 @@ function Menubar() {
                 { label: "Invalid State", icon: "pi pi-fw pi-exclamation-circle", to: "invalidstate" },
                 { label: "Button", icon: "pi pi-fw pi-mobile", to: "/button" },
                 { label: "Table", icon: "pi pi-fw pi-table", to: "/table" },
+                { label: "Data - Table", icon: "pi pi-fw pi-table", to: "/table1" },
                 { label: "List", icon: "pi pi-fw pi-list", to: "/list" },
                 { label: "Tree", icon: "pi pi-fw pi-share-alt", to: "/tree" },
                 { label: "Panel", icon: "pi pi-fw pi-tablet", to: "/panel" },
@@ -279,18 +289,26 @@ function Menubar() {
         "layout-theme-light": layoutColorMode === "light",
     });
 
+   
     return (
         <>
-            <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
+            <div className={wrapperClass} onClick={onWrapperClick}>
+                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
 
-            <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
+                <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
 
-            <div className="layout-sidebar" onClick={onSidebarClick}>
-                <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-            </div>
+                <div className="layout-sidebar" onClick={onSidebarClick}>
+                    <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
+                </div>
 
-            <div className="layout-main-container" style={{ marginLeft: 0, padding: "2rem" }}>
-                <div className="layout-main"></div>
+                <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+
+                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
+                    <div className="layout-mask p-component-overlay"></div>
+                </CSSTransition>
+                <div className="layout-main-container">
+                    <div className="layout-main">{props?.dashboard}</div>
+                </div>
             </div>
         </>
     );

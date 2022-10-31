@@ -95,10 +95,10 @@ const Login = () => {
                             </div>
                             <div className="pswrd">
                                 <p className="forgot-password text-left ">
-                                    Have'nt an account ? <a href="#/register">Sign up</a>
+                                    Have'nt an account ? <a href="/register">Sign up</a>
                                 </p>
                                 <p className="forgot-password ">
-                                    Forgot <a href="#/forgetpassword">password?</a>
+                                    Forgot <a href="/forgetpassword">password?</a>
                                 </p>
                             </div>
                         </div>

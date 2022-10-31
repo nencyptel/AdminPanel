@@ -23,8 +23,6 @@ export const LoginData = createAsyncThunk("user/login", async (data, { rejectWit
 // initialize userToken from local storage
 const userToken = localStorage.getItem("userToken") ? localStorage.getItem("userToken") : null;
 
-console.log(userToken + "token");
-
 const initialState = {
     loading: false,
     userInfo: null,

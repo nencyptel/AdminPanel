@@ -5,17 +5,16 @@ import classNames from "classnames";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
 import "./components/top.css";
-import { useNavigate } from "react-router-dom";
+
 import { useHistory ,Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {logout} from '../src/components/Redux/Reducer/LoginSlice';
 
 export const AppTopbar = (props) => {
-    //let navigate = useNavigate();
+ 
     const dispatch= useDispatch();
     const history = useHistory();
     const userToken = localStorage.getItem("userToken")
-    // const userToken = useSelector((state) => state?.user?.userToken);
     const [token, setToken] = useState(false);
 
     let items = [
@@ -23,14 +22,14 @@ export const AppTopbar = (props) => {
             label: "My Profile",
             icon: "pi pi-fw pi-user",
             command: () => {
-                window.location.href = "#/dashboard";
+                history.push("/dashboard");
             },
         },
         {
             label: "Login",
             icon: "pi pi-fw pi-lock",
             command: () => {
-                window.location.href = "#/login";
+                history.push( "/login");
             },
         },
     ];
@@ -40,7 +39,8 @@ export const AppTopbar = (props) => {
             label: "My Profile",
             icon: "pi pi-fw pi-user",
             command: () => {
-                window.location.href = "#/myprofile";
+                history.push("/myprofile")
+              
             },
         },
         {

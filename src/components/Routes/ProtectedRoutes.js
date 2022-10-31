@@ -57,7 +57,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     }else{
         setItem(false)
     }
-    console.log(userToken);
+    
   },[userToken]);
 
   

@@ -1,15 +1,25 @@
-import React, { useState} from "react";
+import React, { useState , useEffect  , useRef} from "react";
 import "../components/style/login.css";
 import { Toast } from "primereact/toast";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import { Dropdown } from "primereact/dropdown";
 import HttpService from "./utils/http.service";
+import { CreateUserData } from "./Redux/Reducer/createUserSlice";
+import { useSelector , useDispatch } from "react-redux";
 
 const Register = () => {
 
+    
+    const dispatch = useDispatch();
     const dropdownValues = ["Admin", "User"];
     const [dropdownValue, setDropdownValue] = useState();
+    const userInfo = useSelector((state) => state?.newuser?.userInfo);
+    const Error = useSelector((state) => state?.newuser?.error);
+    const toast = useRef(null);
+    const history= useHistory();
+
 
     const [user, setUser] = useState({
         Email: "",
@@ -19,9 +29,20 @@ const Register = () => {
         About: "",
         Firstname: "",
         Lastname: "",
+        usertype:""
     });
 
+    const dropdown=(e)=>{
+        if (e.target.value) {
+            console.log(e.target.value);
+            setDropdownValue(e.value);
+          
+        }
+    }
+
     const handleChange = (e) => {
+        console.log(e.target.name)
+     
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
@@ -36,13 +57,27 @@ const Register = () => {
             About: user.About,
             Firstname: user.Firstname,
             Lastname: user.Lastname,
+            usertype:dropdownValue
         };
-
-        setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
-
-        const response=await axios.post(`${HttpService.Register}`, data);
-        console.log(response);
+  
+        if(dispatch(CreateUserData(data))){
+            setUser({Email :"",Password :"", Username :"", Phone :"", Firstname :"", Lastname :"",About :""})
+        }
+        // const response=await axios.post(`${HttpService.Register}`, data);
+        // console.log(response);
     };
+   useEffect(() => {
+    if(userInfo){
+        console.log(userInfo)
+        toast.current.show({ severity: "success", summary: "Successful", detail: "Register succesfull", life: 3000 });
+        history.push('/login')
+    }
+    else if (Error){
+        console.log(Error);
+        toast.current.show({ severity: "error", summary: "Register Unsuccessful", detail: `${Error.payload.msg}`, life: 3000 });
+    }
+   }, [userInfo , Error])
+   
 
     return (
         <div className="App">
@@ -81,9 +116,9 @@ const Register = () => {
                                 <label className="mb-4">About </label>
                                 <textarea name="About" value={user.About} onChange={handleChange} type="text" className="form-control" style={{ resize: "none" }} />
                             </div>
-                            <div className="mb-3">
+                            <div className="UserType mb-3" style={{display:'flex' , flexDirection:'column'}}>
                                 <label className="mb-4">Who are you ?</label>
-                                <Dropdown value={dropdownValue} options={dropdownValues} placeholder="Select Usertype" />
+                                <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select Usertype" />
                             </div>
 
                            
@@ -104,7 +139,7 @@ const Register = () => {
                             </div>
                             <div className="pswrd">
                                 <p className="forgot-password text-left ">
-                                    Already have an account? <a href="#/login">Login</a>
+                                    Already have an account? <a href="/login">Login</a>
                                 </p>
                                
                             </div>

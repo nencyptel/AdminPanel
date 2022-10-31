@@ -10,6 +10,7 @@ import Dashboard from "./Dashboard";
 import { CreateUserData } from "./Redux/Reducer/createUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Menubar from "./Common/menubar";
 
 const CreateUser = () => {
     const dispatch = useDispatch();
@@ -27,8 +28,9 @@ const CreateUser = () => {
     var list = [];
 
     const toast = useRef(null);
-
+    const usertypevalues = ["Admin", "User"];
     const [dropdownValue, setDropdownValue] = useState();
+    const [usertypevalue, setUsertypevalue] = useState();
     const [accesible, setAccesible] = useState([]);
 
     const drpdwn = (e, index) => {
@@ -45,17 +47,14 @@ const CreateUser = () => {
             const id = e.target.value;
 
             setSwitchValue({ [id]: (switchValue[id] = true) });
-
+            setUsertypevalue(e.value);
             setDropdownValue(e.value);
             setAccesible((prevstate) => [e.value]);
-        }
-        else{
+        } else {
             console.log("nothing");
-            setDropdownValue('Dashboard 1'); 
+            setDropdownValue("Dashboard 1");
         }
     };
-
-
 
     const dropdownValues = ["Dashboard", "Dashboard 1", "Dashboard 2", "Dashboard 3"];
 
@@ -69,6 +68,7 @@ const CreateUser = () => {
         Lastname: "",
         firstpage: "",
         pages: [{}],
+        usertype: "",
     });
 
     const handleChange = (e) => {
@@ -87,13 +87,13 @@ const CreateUser = () => {
             About: user.About,
             Firstname: user.Firstname,
             Lastname: user.Lastname,
+            usertype: usertypevalue,
             firstpage: dropdownValue,
             // pagelist: {name:[accesible],url:[accesible]},
             pagelist: accesible.map((ele) => {
                 return { name: ele, url: ele };
             }),
         };
-   
 
         if (dispatch(CreateUserData(data))) {
             setUser({
@@ -105,6 +105,7 @@ const CreateUser = () => {
                 Firstname: "",
                 Lastname: "",
                 firstpage: "",
+                usertype: "",
                 pages: [{}],
             });
             setSwitchValue({
@@ -117,92 +118,103 @@ const CreateUser = () => {
     };
 
     useEffect(() => {
-        if (userInfo) {  
-            toast.current.show({ severity: "success", summary: "Successful", detail: "Register succesfull", life: 3000 });
-            // history.push('/table1')
-        }
-        else if (Error) {
+        if (userInfo) {
+            toast.current.show({ severity: "success", summary: "Successful", detail: "User created succesfull", life: 3000 });
+            //  history.push('/table1')
+        } else if (Error) {
             console.log(Error, "hey");
             toast.current.show({ severity: "error", summary: "Register Unsuccessful", detail: `${Error.payload.msg}`, life: 3000 });
         }
-    }, [accesible,Error, userInfo ]);
+    }, [accesible, Error, userInfo]);
 
     return (
-        <div className="grid p-fluid">
-            <Toast ref={toast} />
-            <div className="col-12 md:col-6">
-                <form method="post" onSubmit={handlesubmit}>
-                    <div className="card">
-                        <h5>Username </h5>
-                        <div className="p-inputgroup">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-user"></i>
-                            </span>
-                            <InputText placeholder="Username" name="Username" value={user.Username} onChange={handleChange} />
-                        </div>
+        <>
+            <Menubar
+                dashboard={
+                    <>
+                        <div className="grid p-fluid">
+                            <Toast ref={toast} />
+                            <div className="col-12 md:col-6">
+                                <form method="post" onSubmit={handlesubmit}>
+                                    <div className="card">
+                                        <h5>Username </h5>
+                                        <div className="p-inputgroup">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-user"></i>
+                                            </span>
+                                            <InputText placeholder="Username" name="Username" value={user.Username} onChange={handleChange}  required/>
+                                        </div>
 
-                        <h5>Firstname </h5>
-                        <div className="p-inputgroup">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-id-card"></i>
-                            </span>
-                            <InputText placeholder="Firstname" name="Firstname" value={user.Firstname} onChange={handleChange} />
-                        </div>
-                        <h5>Lastname </h5>
-                        <div className="p-inputgroup">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-id-card"></i>
-                            </span>
-                            <InputText placeholder="Lastname" name="Lastname" value={user.Lastname} onChange={handleChange} />
-                        </div>
+                                        <h5>Firstname </h5>
+                                        <div className="p-inputgroup">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-id-card"></i>
+                                            </span>
+                                            <InputText placeholder="Firstname" name="Firstname" value={user.Firstname} onChange={handleChange} />
+                                        </div>
+                                        <h5>Lastname </h5>
+                                        <div className="p-inputgroup">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-id-card"></i>
+                                            </span>
+                                            <InputText placeholder="Lastname" name="Lastname" value={user.Lastname} onChange={handleChange} />
+                                        </div>
 
-                        <h5>Email </h5>
-                        <div className="p-inputgroup ">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-envelope"></i>
-                            </span>
-                            <InputText placeholder="Email" name="Email" value={user.Email} onChange={handleChange} />
+                                        <h5>Email </h5>
+                                        <div className="p-inputgroup ">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-envelope"></i>
+                                            </span>
+                                            <InputText  placeholder="Email" name="Email" value={user.Email} onChange={handleChange} required/>
+                                        </div>
+
+                                        <h5>Password </h5>
+                                        <div className="p-inputgroup ">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-lock"></i>
+                                            </span>
+                                            <InputText type="password" placeholder="Password" name="Password" value={user.Password} onChange={handleChange} />
+                                        </div>
+
+                                        <h5>Phone </h5>
+                                        <div className="p-inputgroup ">
+                                            <span className="p-inputgroup-addon">
+                                                <i className="pi pi-phone"></i>
+                                            </span>
+                                            <InputText type="tel" placeholder="Phone" name="Phone" value={user.Phone} onChange={handleChange} />
+                                        </div>
+
+                                        <h5>Who are you ?</h5>
+                                        <>
+                                            <Dropdown value={usertypevalue} onChange={dropdown} options={usertypevalues} placeholder="Select Usertype" />
+                                        </>
+                                        <h5>First Page</h5>
+                                        <>
+                                            {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
+                                            <Dropdown value={dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
+                                            <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
+                                        </>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className="col-12 md:col-6">
+                                <div className="card">
+                                    {dropdownValues.map((ele, index) => {
+                                        return (
+                                            <>
+                                                <h5>{ele}</h5>
+                                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
+                                            </>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
-
-                        <h5>Password </h5>
-                        <div className="p-inputgroup ">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-lock"></i>
-                            </span>
-                            <InputText type="password" placeholder="Password" name="Password" value={user.Password} onChange={handleChange} />
-                        </div>
-
-                        <h5>Phone </h5>
-                        <div className="p-inputgroup ">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-phone"></i>
-                            </span>
-                            <InputText type="tel" placeholder="Phone" name="Phone" value={user.Phone} onChange={handleChange}  />
-                        </div>
-
-                        <h5>First Page</h5>
-                        <>
-                            {/* <MultiSelect value={multiselectValue} onChange={HandleAcces} options={multiselectValues} optionLabel="name" placeholder="Select Countries" filter itemTemplate={itemTemplate} selectedItemTemplate={selectedItemTemplate} /> */}
-                            <Dropdown  value={dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
-                            <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
-                        </>
-                    </div>
-                </form>
-            </div>
-
-            <div className="col-12 md:col-6">
-                <div className="card">
-                    {dropdownValues.map((ele, index) => {
-                        return (
-                            <>
-                                <h5>{ele}</h5>
-                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, index)} />
-                            </>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
+                    </>
+                }
+            ></Menubar>
+        </>
     );
 };
 

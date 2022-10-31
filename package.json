@@ -32,6 +32,8 @@
         "react-scripts": "^5.0.1",
         "react-toastify": "^9.0.8",
         "react-transition-group": "^4.4.1",
+        "redux-logger": "^3.0.6",
+        "redux-thunk": "^2.4.1",
         "sass": "^1.32.8"
     },
     "scripts": {

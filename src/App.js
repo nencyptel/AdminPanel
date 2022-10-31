@@ -2,10 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { Route, BrowserRouter, Switch, useHistory, useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { Redirect } from "react-router-dom";
-import { AppTopbar } from "./AppTopbar";
-import { AppFooter } from "./AppFooter";
-import { AppMenu } from "./AppMenu";
 import { AppConfig } from "./AppConfig";
 import MyProfile from "./components/MyProfile";
 
@@ -325,109 +321,58 @@ const App = () => {
         "layout-theme-light": layoutColorMode === "light",
     });
 
-    useEffect(() => {
-        if (token != "undefined") {
-            setLogin(true);
-        }
-        fetchaccesiblepage();
-    }, [page, token]);
-
     return (
         <>
-            <Route path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/forgetpassword" component={ForgetPassword} />
-            <Route exact path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
-            <Route path="/notfound" component={NotFoundPage} />
-            <div className={wrapperClass} onClick={onWrapperClick}>
-                <Tooltip ref={copyTooltipRef} target=".block-action-copy" position="bottom" content="Copied to clipboard" event="focus" />
-                {token ? (
-                    <>
-                        <AppTopbar onToggleMenuClick={onToggleMenuClick} layoutColorMode={layoutColorMode} mobileTopbarMenuActive={mobileTopbarMenuActive} onMobileTopbarMenuClick={onMobileTopbarMenuClick} onMobileSubTopbarMenuClick={onMobileSubTopbarMenuClick} />
-                        <div className="layout-sidebar" onClick={onSidebarClick}>
-                            <AppMenu model={menu} onMenuItemClick={onMenuItemClick} layoutColorMode={layoutColorMode} />
-                        </div>
-                        <div className="layout-main-container">
-                            <div className="layout-main">
-                                <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
-                                <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                                <PrivateRoute path="/dashboard-1" component={Dashboard1} />
-                                <PrivateRoute path="/dashboard" component={Dashboard} />
-                                <PrivateRoute path="/dashboard-2" component={Dashboard2} />
-                                <PrivateRoute path="/dashboard-3" component={Dashboard3} />
-                                <PrivateRoute path="/input" component={InputDemo} />
-                                <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
-                                <Route path="/invalidstate" component={InvalidStateDemo} />
-                                <Route path="/button" component={ButtonDemo} />
-                                <Route path="/table" component={TableDemo} />
-                                <Route path="/list" component={ListDemo} />
-                                <Route path="/tree" component={TreeDemo} />
-                                <Route path="/panel" component={PanelDemo} />
-                                <Route path="/overlay" component={OverlayDemo} />
-                                <Route path="/media" component={MediaDemo} />
-                                <Route path="/menu" component={MenuDemo} />
-                                <Route path="/messages" component={MessagesDemo} />
-                                <Route path="/blocks" component={BlocksDemo} />
-                                <Route path="/icons" component={IconsDemo} />
-                                <Route path="/file" component={FileDemo} />
-                                <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                                <Route path="/misc" component={MiscDemo} />
-                                <Route path="/timeline" component={TimelineDemo} />
-                                <Route path="/crud" component={Crud} />
-                                <Route path="/empty" component={EmptyPage} />
-                                <Route path="/documentation" component={Documentation} />
-                                <Route path="/createuser" component={CreateUser} />
-                                <Route path="/table1" component={Table} />
-                                <PrivateRoute path="/myprofile" component={MyProfile}></PrivateRoute>
-                                <PrivateRoute path="/editprofile" component={EditProfile}></PrivateRoute>
-                            </div>
+        <BrowserRouter>
+        <Switch>
+        <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/forgetpassword" component={ForgetPassword} />
+                <Route exact path="/confirmpassword/:_id/:token" component={ConfirmPassword} />
+                <Route exact path="/menu" component={MenuDemo} />
+                <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
+                <PrivateRoute exact path="/" component={Dashboard} />
+                <PrivateRoute exact path="/dashboard-1" component={Dashboard1} />
+                <PrivateRoute exact path="/dashboard" component={FormLayoutDemo} />
+                <PrivateRoute exact path="/dashboard-2" component={Dashboard2} />
+                <PrivateRoute exact path="/dashboard-3" component={Dashboard3} />
+                <PrivateRoute exact path="/input" component={InputDemo} />
+                <PrivateRoute exact path="/floatlabel" component={FloatLabelDemo} />
+                <Route exact path="/invalidstate" component={InvalidStateDemo} />
+                <Route exact path="/button" component={ButtonDemo} />
+                <Route exact path="/table" component={TableDemo} />
+                <Route exact path="/list" component={ListDemo} />
+                <Route exact path="/tree" component={TreeDemo} />
+                <Route exact path="/panel" component={PanelDemo} />
+                <Route exact path="/overlay" component={OverlayDemo} />
+                <Route path="/media" component={MediaDemo} />
+                <Route path="/messages" component={MessagesDemo} />
+                <Route path="/blocks" component={BlocksDemo} />
+                <Route path="/icons" component={IconsDemo} />
+                <Route path="/file" component={FileDemo} />
+                <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
+                <Route path="/misc" component={MiscDemo} />
+                <Route exact path="/timeline" component={TimelineDemo} />
+                <Route path="/crud" component={Crud} />
+                <Route path="/empty" component={EmptyPage} />
+                <Route path="/documentation" component={Documentation} />
+                <Route exact path="/createuser" component={CreateUser} />
+                <Route exact path="/table1" component={Table} />
+                <PrivateRoute exact path="/myprofile" component={MyProfile}></PrivateRoute>
+                <PrivateRoute exact path="/editprofile" component={EditProfile}></PrivateRoute>
+            
+              <Route component={NotFoundPage} />
+        </Switch>
+        </BrowserRouter>
+           
+               
 
-                            <AppFooter layoutColorMode={layoutColorMode} />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <PrivateRoute path="/formlayout" component={FormLayoutDemo}></PrivateRoute>
-                        <PrivateRoute path="/" exact render={() => <Dashboard colorMode={layoutColorMode} location={location} />} />
-                        <PrivateRoute path="/dashboard-1" component={Dashboard1} />
-                        <PrivateRoute path="/dashboard" component={Dashboard} />
-                        <PrivateRoute path="/dashboard-2" component={Dashboard2} />
-                        <PrivateRoute path="/dashboard-3" component={Dashboard3} />
-                        <PrivateRoute path="/input" component={InputDemo} />
-                        <PrivateRoute path="/floatlabel" component={FloatLabelDemo} />
-                        <PrivateRoute path="/myprofile" component={MyProfile}></PrivateRoute>
-                        <PrivateRoute path="/editprofile" component={EditProfile}></PrivateRoute>
-                        <Route path="/invalidstate" component={InvalidStateDemo} />
-                        <Route path="/button" component={ButtonDemo} />
-                        <Route path="/table" component={TableDemo} />
-                        <Route path="/list" component={ListDemo} />
-                        <Route path="/tree" component={TreeDemo} />
-                        <Route path="/panel" component={PanelDemo} />
-                        <Route path="/overlay" component={OverlayDemo} />
-                        <Route path="/media" component={MediaDemo} />
-                        <Route path="/menu" component={MenuDemo} />
-                        <Route path="/messages" component={MessagesDemo} />
-                        <Route path="/blocks" component={BlocksDemo} />
-                        <Route path="/icons" component={IconsDemo} />
-                        <Route path="/file" component={FileDemo} />
-                        <Route path="/chart" render={() => <ChartDemo colorMode={layoutColorMode} location={location} />} />
-                        <Route path="/misc" component={MiscDemo} />
-                        <Route path="/timeline" component={TimelineDemo} />
-                        <Route path="/crud" component={Crud} />
-                        <Route path="/empty" component={EmptyPage} />
-                        <Route path="/documentation" component={Documentation} />
-
-                        <Route path="/createuser" component={CreateUser} />
-                        <Route path="/table1" component={Table} />
-                    </>
-                )}
-
-                {/* <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
+            <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
 
                 <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
                     <div className="layout-mask p-component-overlay"></div>
-                </CSSTransition> */}
-            </div>
+                </CSSTransition> 
+            {/* </div> */}
         </>
     );
 };

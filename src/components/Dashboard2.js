@@ -20,6 +20,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { TreeSelect } from 'primereact/treeselect';
 import { SelectButton } from 'primereact/selectbutton';
 import { NodeService } from '../service/NodeService';
+import Menubar from './Common/menubar';
 
 const Dashboard2 = () => {
 
@@ -140,7 +141,9 @@ const Dashboard2 = () => {
     };
 
     return (
-        <div className="grid p-fluid">
+        <>
+         <Menubar dashboard={<>
+            <div className="grid p-fluid">
         <div className="col-12 md:col-6">
             <div className="card">
                 <h5>InputText</h5>
@@ -301,6 +304,11 @@ const Dashboard2 = () => {
             </div>
         </div>
     </div >
+         </>}>
+
+         </Menubar>
+        </>
+  
     );
 }
 
