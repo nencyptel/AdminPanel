@@ -227,10 +227,9 @@ const Table = () => {
             <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={(e) => confirmDeleteuser(e)} />
         </>
     );
-     const showPage =()=>{
-        console.log("pagenumber");
-     }
-
+    
+     const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-text" />;
+     const paginatorRight = <Button type="button" icon="pi pi-cloud" className="p-button-text" />;
 
     return (
         <>
@@ -253,15 +252,18 @@ const Table = () => {
                                     <div style={{ display: "flex", marginBottom: "15px" }}></div>
 
                                     <DataTable 
-                                    value={customers1} 
-                                    paginator 
-                                    className="p-datatable-gridlines " 
-                                    showGridlines 
-                                    onPage={showPage()}
-                                    rows={10} 
-                                    dataKey="id" 
-                                    loading={loading1} 
-                                    responsiveLayout="scroll" 
+                                    value={customers1} paginator responsiveLayout="scroll"
+                                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[5,10]}
+                                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} 
+                                    // paginator 
+                                    // className="p-datatable-gridlines " 
+                                    // showGridlines 
+                                     onPage={(e) => this.setState({first: e.first})}
+                                    // rows={10} 
+                                    // dataKey="id" 
+                                    // loading={loading1} 
+                                    // responsiveLayout="scroll" 
                                     emptyMessage="No customers found.">
 
                                         <Column icon="pi pi-plus" sortable="custom" sorting="handleSort($event)" allowSorting={true} field="Username" header="User Name" style={{ minWidth: "12rem" }} />

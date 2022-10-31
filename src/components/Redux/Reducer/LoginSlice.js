@@ -2,21 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import HttpService from "../../utils/http.service";
 
-
 export const LoginData = createAsyncThunk("user/login", async (data, { rejectWithValue }) => {
     try {
-       const res= await axios.post(`${HttpService.login}`, data)
-        
-          const token = res.data?.token?.token;
-          localStorage.setItem("userToken", token);
+        const res = await axios.post(`${HttpService.login}`, data);
+        const token = res.data?.token?.token;
+        localStorage.setItem("userToken", token);
 
-          return res;
-      
+        return res;
     } catch (error) {
-        // return custom error message from API if any
-          console.log(error.response);  
-          return rejectWithValue(error.response.data);
-      
+        
+        console.log(error.response);
+        return rejectWithValue(error.response.data);
     }
 });
 
@@ -57,7 +53,7 @@ const loginServiceSlice = createSlice({
             state.error = payload;
             state.userToken = localStorage.getItem("userToken") ? localStorage.getItem("userToken") : null;
         },
-        [LoginData.rejected]: (state, payload ) => {
+        [LoginData.rejected]: (state, payload) => {
             state.loading = false;
             state.error = payload;
         },

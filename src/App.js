@@ -355,9 +355,9 @@ const App = () => {
                 <Route exact path="/timeline" component={TimelineDemo} />
                 <Route path="/crud" component={Crud} />
                 <Route path="/empty" component={EmptyPage} />
-                <Route path="/documentation" component={Documentation} />
-                <Route exact path="/createuser" component={CreateUser} />
-                <Route exact path="/table1" component={Table} />
+                <PrivateRoute path="/documentation" component={Documentation} />
+                <PrivateRoute exact path="/createuser" component={CreateUser} />
+                <PrivateRoute exact path="/table1" component={Table} />
                 <PrivateRoute exact path="/myprofile" component={MyProfile}></PrivateRoute>
                 <PrivateRoute exact path="/editprofile" component={EditProfile}></PrivateRoute>
             
