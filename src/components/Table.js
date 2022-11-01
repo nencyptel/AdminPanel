@@ -17,6 +17,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import string_to_slug from "./Common/strintGenerator";
 import Menubar from "./Common/menubar";
+import { Ripple } from 'primereact/ripple';
 
 const Table = () => {
     const [customers1, setCustomers1] = useState(null);
@@ -31,6 +32,8 @@ const Table = () => {
     const [editData, setEditdata] = useState({});
     const [accesible, setAccesible] = useState([]);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageInputTooltip, setPageInputTooltip] = useState('Press \'Enter\' key to go to this page.');
 
     const usertypevalues = ["Admin", "User"];
     const dropdownValues = ["Dashboard", "Dashboard 1", "Dashboard 2", "Dashboard 3"];
@@ -74,7 +77,7 @@ const Table = () => {
         }
     };
 
-    console.log(switchValue, accesible, "current");
+    // console.log(switchValue, accesible, "current");
     const dropdown = (e) => {
         if (e.target.value) {
             console.log(e.target.value);
@@ -170,7 +173,7 @@ const Table = () => {
     useEffect(() => {
         setLoading1(true);
         customerService.getCustomersLarge().then((data) => {
-            setCustomers1(getCustomers1(data));
+            setCustomers1(getCustomers1(data.user));
             setLoading1(false);
         });
 
@@ -227,9 +230,85 @@ const Table = () => {
             <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={(e) => confirmDeleteuser(e)} />
         </>
     );
-    
-     const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-text" />;
-     const paginatorRight = <Button type="button" icon="pi pi-cloud" className="p-button-text" />;
+
+    const onPageInputKeyDown = (event, options) => {
+        if (event.key === 'Enter') {
+            const page = parseInt(currentPage);
+            if (page < 1 || page > options.totalPages) {
+                setPageInputTooltip(`Value must be between 1 and ${options.totalPages}.`);
+            }
+            else {
+                const first = currentPage ? options.rows * (page - 1) : 0;
+
+                setFirst1(first);
+                setPageInputTooltip('Press \'Enter\' key to go to this page.');
+            }
+        }
+    }
+
+    const onPageInputChange = (event) => {
+        setCurrentPage(event.target.value);
+    }
+
+    const handlePageChange = page => {
+        console.log(page, "clicked")
+
+    }
+    const [first1, setFirst1] = useState(0);
+    const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-text" />;
+    const paginatorRight = <Button type="button" icon="pi pi-cloud" className="p-button-text" />;
+    const template1 = {
+        layout: 'PrevPageLink PageLinks NextPageLink RowsPerPageDropdown CurrentPageReport',
+        'PrevPageLink': (options) => {
+            return (
+                <button type="button" className={options.className} onClick={options.onClick} disabled={options.disabled}>
+                    <span className="p-3">Previous</span>
+                    <Ripple />
+                </button>
+            )
+        },
+        'NextPageLink': (options) => {
+            return (
+                <button type="button" className={options.className} onClick={options.onClick} disabled={options.disabled}>
+                    <span className="p-3">Next</span>
+                    <Ripple />
+                </button>
+            )
+        },
+        'PageLinks': (options) => {
+            console.log(options, "option")
+            if ((options.view.startPage === options.page && options.view.startPage !== 0) || (options.view.endPage === options.page && options.page + 1 !== options.totalPages)) {
+                const className = classNames(options.className, { 'p-disabled': true });
+
+                return <span className={className} style={{ userSelect: 'none' }}>...</span>;
+            }
+
+            return (
+                <button type="button" className={options.className} onChange={handlePageChange(options)}>
+                    {options.page + 1}
+                    <Ripple />
+                </button>
+            )
+        },
+        'RowsPerPageDropdown': (options) => {
+            const dropdownOptions = [
+                { label: 10, value: 10 },
+                { label: 20, value: 20 },
+                { label: 50, value: 50 },
+                { label: 'All', value: options.totalRecords }
+            ];
+
+            return <Dropdown value={options.value} options={dropdownOptions} onChange={options.onChange} />;
+        },
+        'CurrentPageReport': (options) => {
+            return (
+                <span className="mx-3" style={{ color: 'var(--text-color)', userSelect: 'none' }}>
+                    Go to <InputText size="2" className="ml-1" value={currentPage} tooltip={pageInputTooltip}
+                        onKeyDown={(e) => onPageInputKeyDown(e, options)} onChange={onPageInputChange} />
+                </span>
+            )
+        }
+    };
 
     return (
         <>
@@ -251,20 +330,13 @@ const Table = () => {
                                 <div className="card">
                                     <div style={{ display: "flex", marginBottom: "15px" }}></div>
 
-                                    <DataTable 
-                                    value={customers1} paginator responsiveLayout="scroll"
-                                    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[5,10]}
-                                    paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} 
-                                    // paginator 
-                                    // className="p-datatable-gridlines " 
-                                    // showGridlines 
-                                     onPage={(e) => this.setState({first: e.first})}
-                                    // rows={10} 
-                                    // dataKey="id" 
-                                    // loading={loading1} 
-                                    // responsiveLayout="scroll" 
-                                    emptyMessage="No customers found.">
+                                    <DataTable
+                                        value={customers1} paginator responsiveLayout="scroll"
+                                        paginatorTemplate={template1}
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[5, 10]}
+                                        paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
+
+                                        emptyMessage="No customers found.">
 
                                         <Column icon="pi pi-plus" sortable="custom" sorting="handleSort($event)" allowSorting={true} field="Username" header="User Name" style={{ minWidth: "12rem" }} />
 

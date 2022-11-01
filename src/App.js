@@ -5,6 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { AppConfig } from "./AppConfig";
 import MyProfile from "./components/MyProfile";
 
+import DataTable from "./components/datatable";
 import NotFoundPage from "./components/NotFoundPage";
 import ForgetPassword from "./components/ForgetPassword";
 import Dashboard from "./components/Dashboard";
@@ -354,6 +355,7 @@ const App = () => {
                 <Route path="/misc" component={MiscDemo} />
                 <Route exact path="/timeline" component={TimelineDemo} />
                 <Route path="/crud" component={Crud} />
+                <Route path="/datatable" component={DataTable}/>
                 <Route path="/empty" component={EmptyPage} />
                 <PrivateRoute path="/documentation" component={Documentation} />
                 <PrivateRoute exact path="/createuser" component={CreateUser} />
