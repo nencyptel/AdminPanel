@@ -355,11 +355,11 @@ const App = () => {
                 <Route path="/misc" component={MiscDemo} />
                 <Route exact path="/timeline" component={TimelineDemo} />
                 <Route path="/crud" component={Crud} />
-                <Route path="/datatable" component={DataTable}/>
+                <Route path="/datatable" component={Table}/>
                 <Route path="/empty" component={EmptyPage} />
                 <PrivateRoute path="/documentation" component={Documentation} />
                 <PrivateRoute exact path="/createuser" component={CreateUser} />
-                <PrivateRoute exact path="/table1" component={Table} />
+                <PrivateRoute exact path="/table1" component={DataTable} />
                 <PrivateRoute exact path="/myprofile" component={MyProfile}></PrivateRoute>
                 <PrivateRoute exact path="/editprofile" component={EditProfile}></PrivateRoute>
             
@@ -369,11 +369,7 @@ const App = () => {
            
                
 
-            <AppConfig rippleEffect={ripple} onRippleEffect={onRipple} inputStyle={inputStyle} onInputStyleChange={onInputStyleChange} layoutMode={layoutMode} onLayoutModeChange={onLayoutModeChange} layoutColorMode={layoutColorMode} onColorModeChange={onColorModeChange} />
-
-                <CSSTransition classNames="layout-mask" timeout={{ enter: 200, exit: 200 }} in={mobileMenuActive} unmountOnExit>
-                    <div className="layout-mask p-component-overlay"></div>
-                </CSSTransition> 
+          
             {/* </div> */}
         </>
     );

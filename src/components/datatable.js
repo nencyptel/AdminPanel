@@ -7,16 +7,16 @@ import { Link } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import classNames from "classnames";
 import axios from "axios";
+import { Toast } from "primereact/toast";
 import { InputTextarea } from "primereact/inputtextarea";
 import HttpService from "./utils/http.service";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
 import string_to_slug from "./Common/strintGenerator";
-
+import Menubar from "./Common/menubar";
+import moment from 'moment'
 
 function DataTable1() {
-
-
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
@@ -31,11 +31,11 @@ function DataTable1() {
     const [editData, setEditdata] = useState({});
     const [accesible, setAccesible] = useState([]);
 
-    const [customers1, setCustomers1] = useState(null);
+    const [currentPage, setCurrentPage] = useState();
     const [filters1, setFilters1] = useState(null);
     const [loading1, setLoading1] = useState(true);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
+
     const [pageInputTooltip, setPageInputTooltip] = useState("Press 'Enter' key to go to this page.");
 
     const usertypevalues = ["Admin", "User"];
@@ -96,17 +96,18 @@ function DataTable1() {
 
     const hideDialog = () => {
         setSubmitted(false);
+        console.log("hide");
         setProductDialog(false);
     };
 
-    const editProduct = (row) => {
-        // setPagelist(row.pagelist);
-        // setFirstpage(row.firstpage);
-          setEditdata(row);
-        // setEditUserid(row._id);
-         setProductDialog(true);
+    const editProduct = (value) => {
+        console.log("opened ", value);
+        setPagelist(value.pagelist);
+        setFirstpage(value.firstpage);
+        setEditdata(value);
+        setEditUserid(value._id);
+        setProductDialog(true);
     };
-
 
     const SaveUserlist = async () => {
         const data = {
@@ -124,14 +125,13 @@ function DataTable1() {
 
         const updateuser = await axios.post(`${HttpService.updateUser}/${edituserid}`, data);
 
-     //    if (updateuser) {
-     //        setProductDialog(false);
-     //        customerService.getCustomersLarge().then((data) => {
-     //            setCustomers1(getCustomers1(data));
-     //            setLoading1(false);
-     //        });
-     //        toast.current.show({ severity: "success", summary: "Successful", detail: "User Updated", life: 3000 });
-     //    }
+        if (updateuser) {
+            setSubmitted(true);
+            setProductDialog(false);
+            fetchData(currentPage, perPage);
+
+            toast.current.show({ severity: "success", summary: "Successful", detail: "User Updated", life: 3000 });
+        }
     };
 
     const confirmDeleteSelected = (user) => {
@@ -146,11 +146,8 @@ function DataTable1() {
 
         if (deleteuser) {
             hideDeleteProductsDialog();
-          //   customerService.getCustomersLarge().then((data) => {
-          //       setCustomers1(getCustomers1(data));
-          //       console.log(getCustomers1(data), "inside");
-          //       setLoading1(false);
-          //   });
+            fetchData(currentPage, perPage);
+
             toast.current.show({ severity: "success", summary: "Successful", detail: "User Deleted", life: 3000 });
         }
     };
@@ -171,7 +168,6 @@ function DataTable1() {
         var date = new Date(value);
         return date.toISOString().substring(0, 10);
     };
-
 
     const hideDeleteProductsDialog = () => {
         setDeleteProductsDialog(false);
@@ -209,26 +205,35 @@ function DataTable1() {
         {
             name: "Email",
             selector: (row) => row.Email,
-            width: "500px",
+            width: "250px",
         },
         {
             name: "Phone",
             selector: (row) => row.Phone,
-            width: "100px",
+            width: "200px",
         },
         {
-            name: "Date",
-            name: "Email",
-            selector: (row) => row.Email,
-            width: "500px",
+            name: "About",
+            selector: (row) => row.About,
+            width: "250px",
         },
-         {
+        {
+            name: "createdAt",
+            selector: (row) => moment(row.createdAt).format('MM/DD/YYYY'),
+            width: "150px",
+        },
+        {
             button: true,
-            cell: (row ) => <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={editProduct(row)} />,
+            cell: (row, id) => (
+                <>
+                    {" "}
+                    <div className="actions">
+                        <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" row={row} onClick={() => editProduct(row)} />
+                        <Button icon="pi pi-trash" className="p-button-rounded p-button-warning mt-2" row={row} onClick={() => confirmDeleteSelected(row)} />
+                    </div>{" "}
+                </>
+            ),
         },
-        // {
-        //     cell: (row) => <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={editProduct(row)} />,
-        // },
     ];
 
     useEffect(() => {
@@ -254,6 +259,7 @@ function DataTable1() {
 
     const handlePageChange = (page) => {
         fetchData(page, perPage);
+        setCurrentPage(page);
     };
 
     const handlePerRowsChange = async (newPerPage, page) => {
@@ -266,63 +272,94 @@ function DataTable1() {
         return <div>Loading...</div>;
     } else {
         return (
-            <div className="App">
-                <DataTable columns={columns} data={items} pagination paginationServer paginationTotalRows={totalRows} onChangePage={handlePageChange} onChangeRowsPerPage={handlePerRowsChange} />
-                <Dialog visible={productDialog} header="Edit Details" style={{ width: "450px" }} modal className="p-fluid" onHide={hideDialog} footer={productDialogFooter}>
-                    <div className="field">
-                        <label className="mt-3" htmlFor="Username">
-                            Username
-                        </label>
-                        <InputText name="Username" value={editData.Username} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">Username is required.</small>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="Firstname">Firstname</label>
-                        <InputText name="Firstname" value={editData.Firstname} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">Firstname is required.</small>}
-                    </div>
+            <>
+                <Menubar
+                    dashboard={
+                        <>
+                            <div className="grid table-demo">
+                                <div className="col-12">
+                                    <Toast ref={toast} />
+                                    <h2>
+                                        User List{" "}
+                                        <span>
+                                            <Link to="/createuser">
+                                                <Button icon="pi pi-plus" label="Create User" className="mr-2 mb-2 btn" />
+                                            </Link>
+                                        </span>
+                                    </h2>
 
-                    <div className="field">
-                        <label htmlFor="Lastname">Lastname</label>
-                        <InputText name="Lastname" value={editData.Lastname} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">Lastname is required.</small>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="Email">Email</label>
-                        <InputText name="Email" value={editData.Email} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">Email is required.</small>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="Phone">Phone</label>
-                        <InputText name="Phone" value={editData.Phone} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">Phone is required.</small>}
-                    </div>
-                    <div className="field">
-                        <label htmlFor="About">About</label>
-                        <InputTextarea name="About" value={editData.About} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
-                        {submitted && <small className="p-invalid">About is required.</small>}
-                    </div>
-                    {/* <h5>Who are you ?</h5>
-                                        <>
-                                            <Dropdown value={editData.usertype} onChange={dropdown} options={usertypevalues} placeholder="Select Usertype" />
-                                        </> */}
-                    <h5>Date</h5>
-                    <Calendar name="createdAt" value={editData.createdAt} showIcon showButtonBar></Calendar>
-                    <h5>First Page</h5>
-                    <>
-                        <Dropdown value={firstpage ? firstpage : dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
-                        <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button>
-                    </>
-                    {dropdownValues.map((ele, index) => {
-                        return (
-                            <>
-                                <h5>{ele}</h5>
-                                <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, ele)} />
-                            </>
-                        );
-                    })}
-                </Dialog>
-            </div>
+                                    <div className="card">
+                                        <div style={{ display: "flex", marginBottom: "15px" }}></div>
+                                        {/* <div className="App"> */}
+                                            <DataTable columns={columns} data={items} pagination selectableRows paginationServer paginationTotalRows={totalRows} onChangePage={handlePageChange} onChangeRowsPerPage={handlePerRowsChange} />
+                                        {/* </div> */}
+                                        <Dialog visible={productDialog} header="Edit Details" style={{ width: "450px" }} modal className="p-fluid" onHide={hideDialog} footer={productDialogFooter}>
+                                            <div className="field">
+                                                <label className="mt-3" htmlFor="Username">
+                                                    Username
+                                                </label>
+                                                <InputText name="Username" value={editData.Username} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">Username is required.</small>}
+                                            </div>
+                                            <div className="field">
+                                                <label htmlFor="Firstname">Firstname</label>
+                                                <InputText name="Firstname" value={editData.Firstname} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">Firstname is required.</small>}
+                                            </div>
+
+                                            <div className="field">
+                                                <label htmlFor="Lastname">Lastname</label>
+                                                <InputText name="Lastname" value={editData.Lastname} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">Lastname is required.</small>}
+                                            </div>
+                                            <div className="field">
+                                                <label htmlFor="Email">Email</label>
+                                                <InputText name="Email" value={editData.Email} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">Email is required.</small>}
+                                            </div>
+                                            <div className="field">
+                                                <label htmlFor="Phone">Phone</label>
+                                                <InputText name="Phone" value={editData.Phone} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">Phone is required.</small>}
+                                            </div>
+                                            <div className="field">
+                                                <label htmlFor="About">About</label>
+                                                <InputTextarea name="About" value={editData.About} onChange={(e) => onInputChange(e)} required autoFocus className={classNames({ "p-invalid": submitted })} />
+                                                {submitted && <small className="p-invalid">About is required.</small>}
+                                            </div>
+                                            <h5>Who are you ?</h5>
+                                            <>
+                                                <Dropdown value={editData.usertype} onChange={dropdown} options={usertypevalues} placeholder="Select Usertype" />
+                                            </>
+                                            <h5>Date</h5>
+                                            <Calendar name="createdAt" value={editData.createdAt} showIcon showButtonBar></Calendar>
+                                            <h5>First Page</h5>
+                                            <>
+                                                <Dropdown value={firstpage ? firstpage : dropdownValue} onChange={dropdown} options={dropdownValues} placeholder="Select" />
+                                                {/* <Button type="submit" label="Create User" className="mr-2 mb-2 mt-5"></Button> */}
+                                            </>
+                                            {dropdownValues.map((ele, index) => {
+                                                return (
+                                                    <>
+                                                        <h5>{ele}</h5>
+                                                        <InputSwitch checked={switchValue[ele]} value={ele} name={ele} onChange={(e) => drpdwn(e, ele)} />
+                                                    </>
+                                                );
+                                            })}
+                                        </Dialog>
+                                        <Dialog visible={deleteProductsDialog} style={{ width: "450px" }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+                                            <div className="flex align-items-center justify-content-center">
+                                                <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: "2rem" }} />
+                                                {<span>Are you sure you want to delete the selected user ?</span>}
+                                            </div>
+                                        </Dialog>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
+                />
+            </>
         );
     }
 }
